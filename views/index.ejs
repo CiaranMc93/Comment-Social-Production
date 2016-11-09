@@ -5,6 +5,9 @@
         <!-- External styling -->
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <script type="text/javascript" src="/jquery/dist/jquery.min.js"></script> 
+        <script type="text/javascript" src="/jquery-formdata/jquery.formdata.js"></script>
+        <script type="text/javascript" src="/js/ajax.js"></script>
         <style>
             body         { padding-top:80px; }
         </style>
@@ -12,7 +15,11 @@
     <body>
         <div class="container">
             <div class="jumbotron text-center">
-                <h1>Hello World</h1>
+                <form id="userDataForm" name="userForm">
+                    Username: <input type="text" name="username">
+                    Address: <input type="text" name="firstname">
+                   <p><input type="submit" name="submit"></p>
+                <form>
             </div>
         </div>
     </body>

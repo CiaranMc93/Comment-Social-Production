@@ -13,6 +13,10 @@ var router 	   = express.Router();              // get an instance of the expres
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//our app can use these static files
+app.use(express.static('node_modules'));
+app.use(express.static('views'));
+
 	//set up the port we want to run on
 	var port     = process.env.PORT || 8080;
 
@@ -31,8 +35,12 @@ app.use(bodyParser.json());
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.post('/username', function(req, res) {
-		res.send(req.body);
+	router.post('/', function(req, res) {
+		//send back the data to be displayed
+		res.setHeader('Content-Type', 'application/json');
+
+		//stringify the data into JSON and send
+		res.json(req.body);
 	});
 
 	//default route error handling
