@@ -16,6 +16,7 @@ describe('Routes', function() {
 	    	//test assertions about the code.
 	      res.should.have.status(200);
 	      done();
+	      process.exit();
 	    });
 	});
 });
