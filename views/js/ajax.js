@@ -4,15 +4,14 @@ $(document).ready(function(){
         e.preventDefault();
         var formData = JSON.stringify($("#userDataForm").serializeArray());
 
-        console.log(formData);
-
         $.ajax({
             type: "POST",
             url: "/api/",
             data: formData,
-            sucess: function(){
-                console.log("Got here");
-                $("#response").html(data);
+            dataType: "json",
+            contentType: "application/json",
+            sucess: function(retData){
+                 alert('got here');
             },
             error: function(textstatus, errorThrown) {
                 alert('text status ' + textstatus + ', err ' + errorThrown);

@@ -36,11 +36,10 @@ app.use(express.static('views'));
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/', function(req, res) {
-		//send back the data to be displayed
-		res.setHeader('Content-Type', 'application/json');
-
+		console.log(JSON.stringify(req.body));
 		//stringify the data into JSON and send
-		res.json(req.body);
+		res.send(JSON.stringify(req.body));
+		res.end();
 	});
 
 	//default route error handling
