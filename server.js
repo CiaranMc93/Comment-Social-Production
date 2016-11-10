@@ -36,7 +36,7 @@ app.use(express.static('views'));
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/', function(req, res) {
-		console.log(JSON.stringify(req.body));
+		console.log(req.body);
 		//stringify the data into JSON and send
 		res.send(JSON.stringify(req.body));
 		res.end();

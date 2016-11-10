@@ -7,6 +7,7 @@ chai.use(chaiHttp);
 
 //testing the routes
 describe('Routes', function() {
+
 	//name of the test
 	it('Check /api/', function(done) {
 	chai.request(server)
@@ -19,25 +20,22 @@ describe('Routes', function() {
 	    });
 	});
 
-	it('Check /username/ ', function(done) {
+	it('Should respond with form data sent in', function(done) {
 	chai.request(server)
-		//post to a specific route
-	    .post('/api/username/')
+		//get the correct route to test
+	    .post('/api/')
 	    .set('content-type', 'application/x-www-form-urlencoded')
-	    //send in the JSON data
-	    .send({'Username': 'Ciaran'})
+	    .send({'username':'Ciacavus', 'name':'Ciaran'})
 	    .end(function(err, res){
-	    	//check that the status is OK, the format is in JSON and that the body is an object
+	    	//test assertions about the code.
 		    res.should.have.status(200);
-		    res.should.be.json;
 		    res.body.should.be.a('object');
-		    //check to make sure the json object has a property of Username and make sure the name is equal to what we have sent in
-		    res.body.should.have.property('Username');
-		    res.body.Username.should.equal('Ciaran');
-		    //done with the test
-	      	done();
-	      	//process exit is used so that the continuous integration application can complete the builds
-	      	process.exit();
+		    //check the data we get back from the server
+		    res.body.should.have.property('username');
+		    res.body.username.should.equal('Ciacavus');
+		    res.body.should.have.property('name');
+		    res.body.name.should.equal('Ciaran');
+		    done();
 	    });
 	});
 });
