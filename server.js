@@ -3,9 +3,13 @@
 var express    = require('express');
 var app 	   = express();
 var bodyParser = require('body-parser');
-//var mongoose   = require('mongoose');
+var mongoose   = require('mongoose');
+var configDB   = require('./config/database.js');
 var HttpStatus = require('http-status-codes');
 var router 	   = express.Router();              // get an instance of the express Router
+
+// load up the user model
+var User       = require('./models/user.js');
 
 
 // configure app to use bodyParser()
@@ -36,9 +40,41 @@ app.use(express.static('views'));
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/', function(req, res) {
-		//send the data back as it is already json
-		res.json(req.body);
-		res.end();
+
+		var username = req.body.username;
+		var password = req.body.password;
+
+		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
+            // if there are any errors, return the error
+            if (err)
+            {
+            	//send the data back as it is already json
+				res.json({'user':'not created'});
+            }
+
+            // check to see if theres already a user with that email
+            if (user) 
+            {
+                console.log("Taken Username");
+            } else {
+                // create the user
+                var newUser = new User();
+
+                //add in the relevant details to be inserted
+                newUser.local.username = username;
+                newUser.local.password = newUser.generateHash(password);
+
+                //save in the database
+                newUser.save(function(err) {
+                    if (err)
+                        console.log("User Create error");
+
+                    //send the data back to be displayed
+					res.json({'user':'created','username': req.body.username});
+                });
+            }
+
+        });
 	});
 
 	//default route error handling
@@ -52,8 +88,9 @@ app.use(express.static('views'));
 	app.use('/api', router);
 
 	// DATABASE SETUP
-	// =============================================================================
-	//mongoose.connect(''); // connect to our database
+	// configuration ===============================================================
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again

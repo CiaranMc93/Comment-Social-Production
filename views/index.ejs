@@ -21,10 +21,9 @@
                     <form id="userForm">
                         <!-- Create the inputs and submit button-->
                       <input type="text" ng-model="formData.username" placeholder="Enter username" />
+                      <input type="password" ng-model="formData.password" placeholder="Enter password" />
                       <button type="submit" class="btn btn-primary" ng-click="submitUser()">Done</button>
                     </form>
-                    <!-- When the user submits the data, the server retrieves it and send it back. Render that here -->
-                    <p><b>{{userData.username}}</b></b></p>
                 </div>
             </div>
         </div>
