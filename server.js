@@ -38,6 +38,14 @@ app.use(express.static('views'));
 	    res.render('index.ejs');
 	});
 
+	router.get('/secondtask', function(req, res) {
+	    res.render('index.ejs');
+	});
+
+	router.get('/thirdtask', function(req, res) {
+	    res.render('thirdtask.ejs');
+	});
+
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/', function(req, res) {
 
@@ -45,6 +53,7 @@ app.use(express.static('views'));
 		var password = req.body.password;
 
 		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
+			console.log(user);
             // if there are any errors, return the error
             if (err)
             {
@@ -55,7 +64,7 @@ app.use(express.static('views'));
             // check to see if theres already a user with that email
             if (user) 
             {
-                console.log("Taken Username");
+                res.json({'user':'already created'});
             } else {
                 // create the user
                 var newUser = new User();
@@ -70,11 +79,24 @@ app.use(express.static('views'));
                         console.log("User Create error");
 
                     //send the data back to be displayed
-					res.json({'user':'created','username': req.body.username});
+					res.json(req.body);
                 });
             }
-
         });
+	});
+
+	//second task
+	router.post('/secondtask', function(req, res) {
+		//send the data back as it is already json
+		res.json(req.body);
+		res.end();
+	});
+
+	//third task
+	router.post('/thirdtask', function(req, res) {
+		//send the data back as it is already json
+		res.json(req.body);
+		res.end();
 	});
 
 	//default route error handling

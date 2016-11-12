@@ -3,6 +3,13 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
+var testDB = require("../models/test.js");
+// load up the user model
+var User       = require('../models/user.js');
+var mongoose = require('mongoose');
+var configDB   = require('../config/database.js');
+//make sure promise deprecation warning is removed
+mongoose.Promise = global.Promise;
 
 chai.use(chaiHttp);
 
@@ -20,27 +27,73 @@ describe('Routes', function() {
 	      done();
 	    });
 	});
+});
 
-	//name of the test
-	it('Check 404 Status of Unknown Route', function(done) {
-	chai.request(server)
-		//* represents any path not currently configured
-	    .get('*')
-	    .end(function(err, res){
-	    	//test assertions about the code.
-	      res.should.have.status(404);
-	      done();
-	    });
-	});
+//test database functionality
+describe("Validate Database Functionality", function(){ 
+
+	//create new model
+	var t = new testDB();
+
+    it('Save test user', function(done) {
+
+		//insert data
+		t.name = "Ciaran";
+
+		//save in the database
+        t.save(function(err) {
+            if (err)
+            {
+                throw "error";
+            }
+            else
+            {
+            	//test passed
+            	done();
+            }
+        });
+    });
+
+    it('Find Specific User', function(done) {
+
+    	//find user
+    	testDB.findOne({name: "Ciaran"}, function(err){
+    		if (err)
+            {
+                throw "error";
+            }
+            else
+            {
+            	//test passed
+            	done();
+            }
+    	});
+    });
+
+    it('Remove test user', function(done) {
+
+    	//find user
+    	testDB.find({name: "Ciaran"}).remove(function(err){
+    		if (err)
+            {
+                throw "error";
+            }
+            else
+            {
+            	//test passed
+            	done();
+            }
+    	});
+    });
 });
 
 //testing the route functionality
-describe('Validate POST Route', function() {
+describe('Validate POST Route for Third Task', function() {
 
 	it('API Post Respond with Data Sent In', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .post('/api/')
+	    .post('/api/thirdtask')
 	    .set('Accept', 'application/x-www-form-urlencoded')
 	    .send({'username':'Ciacavus'})
 	    .end(function(err, res){
@@ -57,7 +110,7 @@ describe('Validate POST Route', function() {
 	it('API Post Respond with Incorrect JSON', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .post('/api/')
+	    .post('/api/thirdtask')
 	    .send("randomtextrandomtext")
 	    .end(function(err, res){
 	    	//test assertions about the code.
