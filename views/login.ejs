@@ -1,0 +1,31 @@
+<!doctype html>
+<html ng-app="userInfo">
+    <head>
+        <title>Comment Social</title>
+        <!-- External styling -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <script type="text/javascript" src="/jquery/dist/jquery.min.js"></script> 
+        <script src="/angular/angular.min.js"></script>
+        <script src="/js/core.js"></script>
+        <style>
+            body         { padding-top:80px; }
+        </style>
+    </head>
+    <!-- SET THE CONTROLLER -->
+    <body ng-controller="mainController">
+        <div class="container">
+            <!-- FORM TO SUBMIT DATA -->
+            <div id="user-form" class="row">
+                <div class="col-sm-8 col-sm-offset-2 text-center">
+                    <form id="userForm">
+                        <!-- Create the inputs and submit button-->
+                      <input type="text" ng-model="formData.username" placeholder="Enter username" />
+                      <input type="password" ng-model="formData.password" placeholder="Enter password" />
+                      <button type="submit" class="btn btn-primary" ng-click="submitUser()">Done</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

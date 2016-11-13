@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
     },
 
     info : {
-        date : String
+        dateTime : String
     }
 });
 

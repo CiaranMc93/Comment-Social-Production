@@ -6,13 +6,13 @@ var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
 var configDB   = require('./config/database.js');
 var HttpStatus = require('http-status-codes');
+//make sure promise deprecation warning is removed
+mongoose.Promise = global.Promise;
 //secure the application
 var helmet = require('helmet');
 var router 	   = express.Router();              // get an instance of the express Router
-
 // load up the user model
 var User       = require('./models/user.js');
-
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -37,8 +37,8 @@ app.use(helmet());
 	// =============================================================================
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.get('/', function(req, res) {
-	    res.render('index.ejs');
+	router.get('/login', function(req, res) {
+	    res.render('login.ejs');
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -52,24 +52,25 @@ app.use(helmet());
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.post('/', function(req, res) {
+	router.post('/login', function(req, res) {
 
+		//get data entered
 		var username = req.body.username;
 		var password = req.body.password;
 
+		//check if the username entered is taken
 		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
-			console.log(user);
             // if there are any errors, return the error
             if (err)
             {
             	//send the data back as it is already json
-				res.json({'user':'not created'});
+				res.json({'user':'notCreated'});
             }
 
             // check to see if theres already a user with that email
             if (user) 
             {
-                res.json({'user':'already created'});
+                res.json({'user':'alreadyCreated'});
             } else {
                 // create the user
                 var newUser = new User();
@@ -78,13 +79,19 @@ app.use(helmet());
                 newUser.local.username = username;
                 newUser.local.password = newUser.generateHash(password);
 
+                //get the date and time
+                //format == YYYY:MM:DD:HH:MM:SS
+                var dateTime = getDateTime();
+
+                newUser.info.dateTime = dateTime;
+
                 //save in the database
                 newUser.save(function(err) {
                     if (err)
                         console.log("User Create error");
 
                     //send the data back to be displayed
-					res.json(req.body);
+					res.json({'user':'userCreated'});
                 });
             }
         });
@@ -119,6 +126,31 @@ if(!module.parent)
 	app.listen(port, function () {
 	console.log('The Magic happens on port 8080!');
 	});
+}
+
+function getDateTime() {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+
 }
 
 module.exports = app;

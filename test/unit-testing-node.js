@@ -136,8 +136,51 @@ describe('Validate POST Route for Second and Third Task', function() {
 		    res.body.should.have.property('randomtextrandomtext');
 		    res.body.randomtextrandomtext.should.equal('');
 		    done();
+	    });
+	});
+});
+
+//testing the 4th task
+describe('Validate Data Sending and Database Functionality', function() {
+
+	it('Check User Already Created', function(done) {
+		//check if the username entered is taken
+		User.findOne({ 'local.username' :  'Ciacavus' }, function(err, user) {
+			 // check to see if theres already a user with that email
+            if (user) 
+            {
+            	//passed
+                done();
+            } else {
+            	throw "error";
+            }
+		});
+	});
+
+	it('Create a New User', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/login')
+	    .send({'username':'newUser', 'password':'password'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('userCreated');
+
+		    //remove the user so the test can pass
+		    User.find({name: "newUser"}).remove(function(err){
+	    		if (err)
+	            {
+	                throw "error";
+	            }
+    		});
+		    done();
 		    //process exit is used so that the continuous integration application can complete the builds
-	      	process.exit();
+	      	//process.exit();
 	    });
 	});
 });

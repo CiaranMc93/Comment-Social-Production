@@ -6,7 +6,7 @@ userInfo.controller('mainController', function($scope, $http) {
     //handle the submitUser functionality
     $scope.submitUser = function() {
 
-        $http.post('/api/',$scope.formData).
+        $http.post('/api/login',$scope.formData).
         success(function(data) {
             //bind our response data to our scope to use
             $scope.userData = data;
