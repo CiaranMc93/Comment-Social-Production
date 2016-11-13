@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
 var configDB   = require('./config/database.js');
 var HttpStatus = require('http-status-codes');
+//secure the application
+var helmet = require('helmet');
 var router 	   = express.Router();              // get an instance of the express Router
 
 // load up the user model
@@ -20,6 +22,7 @@ app.use(bodyParser.json());
 //our app can use these static files
 app.use(express.static('node_modules'));
 app.use(express.static('views'));
+app.use(helmet());
 
 	//set up the port we want to run on
 	var port     = process.env.PORT || 8080;
@@ -38,12 +41,14 @@ app.use(express.static('views'));
 	    res.render('index.ejs');
 	});
 
-	router.get('/secondtask', function(req, res) {
-	    res.render('index.ejs');
+	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+	router.get('/helloworld', function(req, res) {
+	    res.render('helloworld.ejs');
 	});
 
-	router.get('/thirdtask', function(req, res) {
-	    res.render('thirdtask.ejs');
+	//this route will demonstrate the the second and third task
+	router.get('/response', function(req, res) {
+	    res.render('respond.ejs');
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -85,15 +90,8 @@ app.use(express.static('views'));
         });
 	});
 
-	//second task
-	router.post('/secondtask', function(req, res) {
-		//send the data back as it is already json
-		res.json(req.body);
-		res.end();
-	});
-
-	//third task
-	router.post('/thirdtask', function(req, res) {
+	//second and third task
+	router.post('/response', function(req, res) {
 		//send the data back as it is already json
 		res.json(req.body);
 		res.end();

@@ -88,12 +88,27 @@ describe("Validate Database Functionality", function(){
 });
 
 //testing the route functionality
-describe('Validate POST Route for Third Task', function() {
+describe('Validate Route for Hello World Task', function() {
+
+	it('Check Hello World Success', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .get('/api/helloworld')
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    done();
+	    });
+	});
+});
+
+//testing the route functionality
+describe('Validate POST Route for Second and Third Task', function() {
 
 	it('API Post Respond with Data Sent In', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .post('/api/thirdtask')
+	    .post('/api/response')
 	    .set('Accept', 'application/x-www-form-urlencoded')
 	    .send({'username':'Ciacavus'})
 	    .end(function(err, res){
@@ -110,7 +125,7 @@ describe('Validate POST Route for Third Task', function() {
 	it('API Post Respond with Incorrect JSON', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .post('/api/thirdtask')
+	    .post('/api/response')
 	    .send("randomtextrandomtext")
 	    .end(function(err, res){
 	    	//test assertions about the code.
