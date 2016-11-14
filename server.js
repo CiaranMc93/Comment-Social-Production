@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
 var configDB   = require('./config/database.js');
 var HttpStatus = require('http-status-codes');
-//make sure promise deprecation warning is removed
-mongoose.Promise = global.Promise;
 //secure the application
 var helmet = require('helmet');
 var router 	   = express.Router();              // get an instance of the express Router
@@ -160,7 +158,7 @@ app.use(helmet());
 	// DATABASE SETUP
 	// configuration ===============================================================
 	//mongoose.connect(configDB.url); // connect to our external database
-	mongoose.connect(configDB.url); // connect to our local database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
