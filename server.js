@@ -33,6 +33,11 @@ app.use(helmet());
         res.redirect('/api/');
     });
 
+    //default route
+    router.get('/', function(req, res) {
+        res.render('submit.ejs');
+    });
+
 	// ROUTES FOR OUR API
 	// =============================================================================
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -63,46 +68,39 @@ app.use(helmet());
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/submit', function(req, res) {
 
-		//get data entered
-		var text = req.submit.text;
+        //check if there was text submitted
+        if(req.body.text == '')
+        {
+            res.json({'error':'emptyText'});
+        }
+        else
+        {
+            //get data entered
+            var text = req.body.text;
 
-		//check if the username entered is taken
-		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
-            // if there are any errors, return the error
-            if (err || req.body.password == '' || req.body.username == '')
-            {
-            	//send the data back as it is already json
-				res.json({'user':'notSubmitted'});
-            }
+            // create the post
+            var newPost = new User();
 
-            // check to see if theres already a user with that email
-            if (user) 
-            {
-                res.json({'user':'alreadyCreated'});
-            } else {
-                // create the user
-                var newUser = new User();
+            //add in the relevant details to be inserted
+            newPost.submission.text = text;
 
-                //add in the relevant details to be inserted
-                newUser.local.username = username;
-                newUser.local.password = newUser.generateHash(password);
+            //get the date and time
+            //format == YYYY:MM:DD:HH:MM:SS
+            var dateTime = getDateTime();
 
-                //get the date and time
-                //format == YYYY:MM:DD:HH:MM:SS
-                var dateTime = getDateTime();
+            //store the dateTime
+            newPost.submission.dateTime = dateTime;
 
-                newUser.info.dateTime = dateTime;
+            //save in the database
+            newPost.save(function(err) {
+                if (err)
+                    console.log("User Create error");
 
-                //save in the database
-                newUser.save(function(err) {
-                    if (err)
-                        console.log("User Create error");
-
-                    //send the data back to be displayed
-					res.json({'user':'userCreated'});
-                });
-            }
-        });
+                //send the data back to be displayed
+                res.json({'user':'postCreated'});
+            });
+        }
+		
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -114,7 +112,7 @@ app.use(helmet());
 		//check if the username entered is taken
 		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
             // if there are any errors, return the error
-            if (err || req.body.password == '' || req.body.username == '')
+            if (err || req.body.username == '')
             {
             	//send the data back as it is already json
 				res.json({'user':'notCreated'});
@@ -130,7 +128,6 @@ app.use(helmet());
 
                 //add in the relevant details to be inserted
                 newUser.local.username = username;
-                newUser.local.password = newUser.generateHash(password);
 
                 //get the date and time
                 //format == YYYY:MM:DD:HH:MM:SS

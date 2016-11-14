@@ -95,25 +95,57 @@ describe('Validate POST Route for Second and Third Task', function() {
 });
 
 //validating the 4th task
-/*
 describe('Validate Data Sending and Database Functionality', function() {
 
-	it('Check Empty Password', function(done) {
+	it('Check Empty Submission', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .post('/api/login')
-	    .send({'username':'testUser','password':''})
+	    .post('/api/submit')
+	    .send({'text':''})
 	    .end(function(err, res){
 	    	//test assertions about the code.
 		    res.should.have.status(200);
 		    res.body.should.be.a('object');
 		    //sent in random text, then it put that into json.
 		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('notCreated');
+		    res.body.should.have.property('error');
+		    res.body.error.should.equal('emptyText');
 		    done();
 	    });
 	});
+
+	it('Create Test Submission', function(done) {
+
+		// create the user
+        var newPost = new User();
+
+        //add in the relevant details to be inserted
+        newPost.submission.text = "testPost";
+
+        //get the date and time
+        //format == YYYY:MM:DD:HH:MM:SS
+        var dateTime = getDateTime();
+
+        newPost.submission.dateTime = dateTime;
+
+        //save the user
+        newPost.save(function(err) {
+            if (err)
+            {
+                console.log("Post Create error");
+            } else
+            {
+            	done();
+            	//exit the process for continuous integration build
+            	process.exit();
+            }
+
+        });
+	});
+});
+
+/*//testing the 5th task
+describe('Validate Data Sending and Database Functionality', function() {
 
 	it('Check Empty Username', function(done) {
 	chai.request(server)
@@ -192,103 +224,6 @@ describe('Validate Data Sending and Database Functionality', function() {
 	});
 });
 */
-
-//testing the 5th task
-describe('Validate Data Sending and Database Functionality', function() {
-
-	it('Check Empty Password', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/login')
-	    .send({'username':'testUser','password':''})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('notCreated');
-		    done();
-	    });
-	});
-
-	it('Check Empty Username', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/login')
-	    .send({'username':'','password':'testPassword'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('notCreated');
-		    done();
-	    });
-	});
-
-	it('Create Test User', function(done) {
-
-		// create the user
-        var newUser = new User();
-
-        //add in the relevant details to be inserted
-        newUser.local.username = "testUser";
-        newUser.local.password = "testPassword";
-
-        //get the date and time
-        //format == YYYY:MM:DD:HH:MM:SS
-        var dateTime = getDateTime();
-
-        newUser.info.dateTime = dateTime;
-
-        //save the user
-        newUser.save(function(err) {
-            if (err)
-            {
-                console.log("User Create error");
-            } else
-            {
-            	done();
-            }
-
-        });
-	});
-
-	it('Verify New Test User', function(done) {
-
-		//check if the username entered is taken
-		User.findOne({ 'local.username' :  'testUser' }, function(err, user) {
-			 // check to see if theres already a user with that email
-            if (user) 
-            {
-            	//passed
-                done();
-            } else {
-            	throw "error";
-            }
-		});
-	});
-
-	it('Remove New Test User', function(done) {
-
-		//remove the user so the test can pass
-	    User.find({'local.username' : "testUser"}).remove(function(err){
-    		if (err)
-            {
-                throw "error";
-            } else
-            {
-            	done();
-            	//exit the process for continuous integration build
-            	process.exit();
-            }
-		});
-	});
-});
 
 //get date time function
 function getDateTime() {
