@@ -20,12 +20,9 @@
                 <div class="col-sm-8 col-sm-offset-2 text-center">
                     <form id="userForm">
                         <!-- Create the inputs and submit button-->
-                      <input type="text" ng-model="formData.user" placeholder="Enter username" />
-                      <input type="text" ng-model="formData.text" placeholder="Enter text post" />
-                      <button type="submit" class="btn btn-primary" ng-click="submitUser()">Done</button>
+                      <input type="text" ng-model="formData.text" placeholder="Enter text" />
+                      <button type="submit" class="btn btn-primary" ng-click="submitPost()">Done</button>
                     </form>
-                    <!-- Show all the submissions by user -->
-                    <p><b>{{userData}}</b></b></p>
                 </div>
             </div>
         </div>

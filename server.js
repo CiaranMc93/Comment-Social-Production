@@ -107,42 +107,22 @@ app.use(helmet());
 		//get data entered
 		var username = req.body.username;
 
-		//check if the username entered is taken
-		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
-            // if there are any errors, return the error
-            if (err || req.body.username == '')
-            {
-            	//send the data back as it is already json
-				res.json({'user':'notCreated'});
-            }
+        //check if there was text submitted
+        if(req.body.text == '')
+        {
+            res.json({'error':'emptyText'});
+        }
+        else
+        {
+            //get data entered
+            var text = req.body.text;
 
-            // check to see if theres already a user with that email
-            if (user) 
-            {
-                res.json({'user':'alreadyCreated'});
-            } else {
-                // create the user
-                var newUser = new User();
-
-                //add in the relevant details to be inserted
-                newUser.local.username = username;
-
-                //get the date and time
-                //format == YYYY:MM:DD:HH:MM:SS
-                var dateTime = getDateTime();
-
-                newUser.info.dateTime = dateTime;
-
-                //save in the database
-                newUser.save(function(err) {
-                    if (err)
-                        console.log("User Create error");
-
-                    //send the data back to be displayed
-					res.json({'user':'userCreated'});
-                });
-            }
-        });
+            //check if the username entered is taken
+            User.find({ 'user.username' :  req.body.username }, function(err, user) {
+                console.log(user);
+                res.json(user);
+            });
+        }
 	});
 
 	//default route error handling
