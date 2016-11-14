@@ -1,6 +1,7 @@
 //server.js
 // get all the tools we need ===================================================
 var express    = require('express');
+var session    = require('express-session');
 var app 	   = express();
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
@@ -20,7 +21,16 @@ app.use(bodyParser.json());
 //our app can use these static files
 app.use(express.static('node_modules'));
 app.use(express.static('views'));
+//session management
+app.use(session({
+    secret: '113547411993',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(helmet());
+
+//session storage variable
+var sessionStore;
 
 	//set up the port we want to run on
 	var port     = process.env.PORT || 8080;
@@ -108,6 +118,9 @@ app.use(helmet());
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/login', function(req, res) {
 
+		//get the session
+		sessionStore = req.session;
+
 		//get data entered
 		var username = req.body.username;
 
@@ -120,11 +133,11 @@ app.use(helmet());
 				res.json({'user':'notCreated'});
             }
 
-            // check to see if theres already a user with that email
+            // check to see if theres already a user with that email and login
             if (user) 
             {
-                var context = {"user":username};
-                req.session['success'] = context;
+            	//store the username when logged in
+            	sessionStore = req.body.username;
                 //send the data back to be displayed
 				res.redirect('/posts');
 
@@ -191,8 +204,8 @@ app.use(helmet());
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	//mongoose.connect(configDB.url); // connect to our external database
-	mongoose.connect(configDB.urlLocal); // connect to our local database
+	mongoose.connect(configDB.url); // connect to our external database
+	//mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
