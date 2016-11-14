@@ -35,12 +35,6 @@ app.use(helmet());
 
 	// ROUTES FOR OUR API
 	// =============================================================================
-
-	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.get('/login', function(req, res) {
-	    res.render('login.ejs');
-	});
-
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.get('/helloworld', function(req, res) {
 	    res.render('helloworld.ejs');
@@ -51,17 +45,76 @@ app.use(helmet());
 	    res.render('respond.ejs');
 	});
 
+	router.get('/submit', function(req, res) {
+	    res.render('submit.ejs');
+	});
+
+	router.get('/login', function(req, res) {
+	    res.render('login.ejs');
+	});
+
+	//second and third task
+	router.post('/response', function(req, res) {
+		//send the data back as it is already json
+		res.json(req.body);
+		res.end();
+	});
+
+	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+	router.post('/submit', function(req, res) {
+
+		//get data entered
+		var text = req.submit.text;
+
+		//check if the username entered is taken
+		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
+            // if there are any errors, return the error
+            if (err || req.body.password == '' || req.body.username == '')
+            {
+            	//send the data back as it is already json
+				res.json({'user':'notSubmitted'});
+            }
+
+            // check to see if theres already a user with that email
+            if (user) 
+            {
+                res.json({'user':'alreadyCreated'});
+            } else {
+                // create the user
+                var newUser = new User();
+
+                //add in the relevant details to be inserted
+                newUser.local.username = username;
+                newUser.local.password = newUser.generateHash(password);
+
+                //get the date and time
+                //format == YYYY:MM:DD:HH:MM:SS
+                var dateTime = getDateTime();
+
+                newUser.info.dateTime = dateTime;
+
+                //save in the database
+                newUser.save(function(err) {
+                    if (err)
+                        console.log("User Create error");
+
+                    //send the data back to be displayed
+					res.json({'user':'userCreated'});
+                });
+            }
+        });
+	});
+
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 	router.post('/login', function(req, res) {
 
 		//get data entered
 		var username = req.body.username;
-		var password = req.body.password;
 
 		//check if the username entered is taken
 		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
             // if there are any errors, return the error
-            if (err)
+            if (err || req.body.password == '' || req.body.username == '')
             {
             	//send the data back as it is already json
 				res.json({'user':'notCreated'});
@@ -95,13 +148,6 @@ app.use(helmet());
                 });
             }
         });
-	});
-
-	//second and third task
-	router.post('/response', function(req, res) {
-		//send the data back as it is already json
-		res.json(req.body);
-		res.end();
 	});
 
 	//default route error handling

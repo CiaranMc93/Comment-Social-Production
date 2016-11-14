@@ -20,71 +20,25 @@ describe('Routes', function() {
 	it('Check /api/', function(done) {
 	chai.request(server)
 		//get the correct route to test
-	    .get('/api/')
+	    .get('/api/helloworld')
 	    .end(function(err, res){
 	    	//test assertions about the code.
 	      res.should.have.status(200);
 	      done();
 	    });
 	});
-});
 
-//test database functionality
-describe("Validate Database Functionality", function(){ 
-
-	//create new model
-	var t = new testDB();
-
-    it('Save test user', function(done) {
-
-		//insert data
-		t.name = "Ciaran";
-
-		//save in the database
-        t.save(function(err) {
-            if (err)
-            {
-                throw "error";
-            }
-            else
-            {
-            	//test passed
-            	done();
-            }
-        });
-    });
-
-    it('Find Specific User', function(done) {
-
-    	//find user
-    	testDB.findOne({name: "Ciaran"}, function(err){
-    		if (err)
-            {
-                throw "error";
-            }
-            else
-            {
-            	//test passed
-            	done();
-            }
-    	});
-    });
-
-    it('Remove test user', function(done) {
-
-    	//find user
-    	testDB.find({name: "Ciaran"}).remove(function(err){
-    		if (err)
-            {
-                throw "error";
-            }
-            else
-            {
-            	//test passed
-            	done();
-            }
-    	});
-    });
+	//error route
+	it('Check 404 Error', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .get('/api/testing123')
+	    .end(function(err, res){
+	    	//test assertions about the code.
+	      res.should.have.status(404);
+	      done();
+	    });
+	});
 });
 
 //testing the route functionality
@@ -140,12 +94,76 @@ describe('Validate POST Route for Second and Third Task', function() {
 	});
 });
 
-//testing the 4th task
+//validating the 4th task
+/*
 describe('Validate Data Sending and Database Functionality', function() {
 
-	it('Check User Already Created', function(done) {
+	it('Check Empty Password', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/login')
+	    .send({'username':'testUser','password':''})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('notCreated');
+		    done();
+	    });
+	});
+
+	it('Check Empty Username', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/login')
+	    .send({'username':'','password':'testPassword'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('notCreated');
+		    done();
+	    });
+	});
+
+	it('Create Test User', function(done) {
+
+		// create the user
+        var newUser = new User();
+
+        //add in the relevant details to be inserted
+        newUser.local.username = "testUser";
+        newUser.local.password = "testPassword";
+
+        //get the date and time
+        //format == YYYY:MM:DD:HH:MM:SS
+        var dateTime = getDateTime();
+
+        newUser.info.dateTime = dateTime;
+
+        //save the user
+        newUser.save(function(err) {
+            if (err)
+            {
+                console.log("User Create error");
+            } else
+            {
+            	done();
+            }
+
+        });
+	});
+
+	it('Verify New Test User', function(done) {
+
 		//check if the username entered is taken
-		User.findOne({ 'local.username' :  'Ciacavus' }, function(err, user) {
+		User.findOne({ 'local.username' :  'testUser' }, function(err, user) {
 			 // check to see if theres already a user with that email
             if (user) 
             {
@@ -157,11 +175,32 @@ describe('Validate Data Sending and Database Functionality', function() {
 		});
 	});
 
-	it('Create a New User', function(done) {
+	it('Remove New Test User', function(done) {
+
+		//remove the user so the test can pass
+	    User.find({'local.username' : "testUser"}).remove(function(err){
+    		if (err)
+            {
+                throw "error";
+            } else
+            {
+            	done();
+            	//exit the process for continuous integration build
+            	process.exit();
+            }
+		});
+	});
+});
+*/
+
+//testing the 5th task
+describe('Validate Data Sending and Database Functionality', function() {
+
+	it('Check Empty Password', function(done) {
 	chai.request(server)
 		//get the correct route to test
 	    .post('/api/login')
-	    .send({'username':'newUser', 'password':'password'})
+	    .send({'username':'testUser','password':''})
 	    .end(function(err, res){
 	    	//test assertions about the code.
 		    res.should.have.status(200);
@@ -169,18 +208,110 @@ describe('Validate Data Sending and Database Functionality', function() {
 		    //sent in random text, then it put that into json.
 		    //check that the text sent in has no value as it is only text
 		    res.body.should.have.property('user');
-		    res.body.user.should.equal('userCreated');
-
-		    //remove the user so the test can pass
-		    User.find({name: "newUser"}).remove(function(err){
-	    		if (err)
-	            {
-	                throw "error";
-	            }
-    		});
+		    res.body.user.should.equal('notCreated');
 		    done();
-		    //process exit is used so that the continuous integration application can complete the builds
-	      	//process.exit();
 	    });
 	});
+
+	it('Check Empty Username', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/login')
+	    .send({'username':'','password':'testPassword'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('notCreated');
+		    done();
+	    });
+	});
+
+	it('Create Test User', function(done) {
+
+		// create the user
+        var newUser = new User();
+
+        //add in the relevant details to be inserted
+        newUser.local.username = "testUser";
+        newUser.local.password = "testPassword";
+
+        //get the date and time
+        //format == YYYY:MM:DD:HH:MM:SS
+        var dateTime = getDateTime();
+
+        newUser.info.dateTime = dateTime;
+
+        //save the user
+        newUser.save(function(err) {
+            if (err)
+            {
+                console.log("User Create error");
+            } else
+            {
+            	done();
+            }
+
+        });
+	});
+
+	it('Verify New Test User', function(done) {
+
+		//check if the username entered is taken
+		User.findOne({ 'local.username' :  'testUser' }, function(err, user) {
+			 // check to see if theres already a user with that email
+            if (user) 
+            {
+            	//passed
+                done();
+            } else {
+            	throw "error";
+            }
+		});
+	});
+
+	it('Remove New Test User', function(done) {
+
+		//remove the user so the test can pass
+	    User.find({'local.username' : "testUser"}).remove(function(err){
+    		if (err)
+            {
+                throw "error";
+            } else
+            {
+            	done();
+            	//exit the process for continuous integration build
+            	process.exit();
+            }
+		});
+	});
 });
+
+//get date time function
+function getDateTime() {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+
+}
