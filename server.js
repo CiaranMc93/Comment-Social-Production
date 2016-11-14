@@ -157,8 +157,8 @@ app.use(helmet());
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	//mongoose.connect(configDB.url); // connect to our external database
-	mongoose.connect(configDB.urlLocal); // connect to our local database
+	mongoose.connect(configDB.url); // connect to our external database
+	//mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
