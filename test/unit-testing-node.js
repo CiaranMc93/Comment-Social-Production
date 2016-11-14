@@ -8,6 +8,8 @@ var testDB = require("../models/test.js");
 var User       = require('../models/user.js');
 var mongoose = require('mongoose');
 var configDB   = require('../config/database.js');
+//make sure promise deprecation warning is removed
+mongoose.Promise = global.Promise;
 
 chai.use(chaiHttp);
 
