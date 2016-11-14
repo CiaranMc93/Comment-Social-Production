@@ -136,11 +136,26 @@ describe('Validate Data Sending and Database Functionality', function() {
             } else
             {
             	done();
-            	//exit the process for continuous integration build
-            	process.exit();
+            	
             }
 
         });
+	});
+
+	it('Remove New Test Post', function(done) {
+
+		//remove the user so the test can pass
+	    User.find({'submission.text' : "testPost"}).remove(function(err){
+    		if (err)
+            {
+                throw "error";
+            } else
+            {
+            	done();
+            	//exit the process for continuous integration build
+            	process.exit();
+            }
+		});
 	});
 });
 

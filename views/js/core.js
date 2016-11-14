@@ -32,4 +32,34 @@ userInfo.controller('mainController', function($scope, $http) {
             console.error("error in posting");
         })
     }
+
+    //handle the userSignup functionality
+    $scope.userSignup = function() {
+
+        $http.post('/api/signup',$scope.formData).
+        success(function(data) {
+            //bind our response data to our scope to use
+            $scope.userData = data;
+            //clear the form
+            $("#userForm")[0].reset();
+            
+        }).error(function(data) {
+            console.error("error in posting");
+        })
+    }
+
+    //handle the userLogin functionality
+    $scope.userLogin = function() {
+
+        $http.post('/api/login',$scope.formData).
+        success(function(data) {
+            //bind our response data to our scope to use
+            $scope.userData = data;
+            //clear the form
+            $("#userForm")[0].reset();
+            
+        }).error(function(data) {
+            console.error("error in posting");
+        })
+    }
 });

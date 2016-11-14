@@ -33,7 +33,7 @@ app.use(helmet());
 
     //default route
     router.get('/', function(req, res) {
-        res.render('submit.ejs');
+        res.render('login.ejs');
     });
 
 	// ROUTES FOR OUR API
@@ -43,17 +43,21 @@ app.use(helmet());
 	    res.render('helloworld.ejs');
 	});
 
-	//this route will demonstrate the the second and third task
+	//this route will demonstrate the the third task
 	router.get('/response', function(req, res) {
-	    res.render('respond.ejs');
+	    res.render('viewJSONResponse.ejs');
 	});
 
 	router.get('/submit', function(req, res) {
-	    res.render('submit.ejs');
+	    res.render('submitPost.ejs');
 	});
 
 	router.get('/login', function(req, res) {
 	    res.render('login.ejs');
+	});
+
+	router.get('/posts', function(req, res) {
+	    res.render('postSubmissions.ejs');
 	});
 
 	//second and third task
@@ -108,7 +112,7 @@ app.use(helmet());
 		var username = req.body.username;
 
 		//check if the username entered is taken
-		User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
+		User.findOne({ 'user.username' :  req.body.username }, function(err, user) {
             // if there are any errors, return the error
             if (err || req.body.username == '')
             {
@@ -119,27 +123,57 @@ app.use(helmet());
             // check to see if theres already a user with that email
             if (user) 
             {
-                res.json({'user':'alreadyCreated'});
+                var context = {"user":username};
+                req.session['success'] = context;
+                //send the data back to be displayed
+				res.redirect('/posts');
+
+            } else {
+                res.json({'user':'User Does not Exist'});
+            }
+        });
+	});
+
+	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+	router.post('/signup', function(req, res) {
+
+		//get data entered
+		var username = req.body.username;
+
+		//check if the username entered is taken
+		User.findOne({ 'user.username' :  username }, function(err, user) {
+            // if there are any errors, return the error
+            if (err || req.body.username == '')
+            {
+            	//send the data back as it is already json
+				res.json({'user':'User Form is Empty'});
+            }
+
+            // check to see if theres already a user with that username
+            if (user) 
+            {
+                res.json({'user':'User Exists Already'});
             } else {
                 // create the user
                 var newUser = new User();
 
                 //add in the relevant details to be inserted
-                newUser.local.username = username;
+                newUser.user.username = username;
 
                 //get the date and time
                 //format == YYYY:MM:DD:HH:MM:SS
                 var dateTime = getDateTime();
 
-                newUser.info.dateTime = dateTime;
+                newUser.submission.dateTime = dateTime;
 
                 //save in the database
                 newUser.save(function(err) {
                     if (err)
                         console.log("User Create error");
 
+                    var context = {"user":username};
                     //send the data back to be displayed
-					res.json({'user':'userCreated'});
+					res.render("postSubmissions.ejs",context);
                 });
             }
         });
@@ -157,8 +191,8 @@ app.use(helmet());
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	mongoose.connect(configDB.url); // connect to our external database
-	//mongoose.connect(configDB.urlLocal); // connect to our local database
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
