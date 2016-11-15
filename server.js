@@ -67,7 +67,9 @@ var sessionStore;
 	});
 
 	router.get('/posts', function(req, res) {
+		console.log("Got here");
 	    res.render('postSubmissions.ejs');
+	    res.end();
 	});
 
 	//second and third task
@@ -139,7 +141,7 @@ var sessionStore;
             	//store the username when logged in
             	sessionStore = req.body.username;
                 //send the data back to be displayed
-				res.redirect('/posts');
+				res.send({redirect : '/api/posts'});
 
             } else {
                 res.json({'user':'User Does not Exist'});

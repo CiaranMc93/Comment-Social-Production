@@ -55,6 +55,10 @@ userInfo.controller('mainController', function($scope, $http) {
         success(function(data) {
             //bind our response data to our scope to use
             $scope.userData = data;
+
+            //redirect
+            window.location = data.redirect;
+
             //clear the form
             $("#userForm")[0].reset();
             
