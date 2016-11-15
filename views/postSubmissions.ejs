@@ -24,21 +24,28 @@
                         <button type="submit" class="btn btn-primary" ng-click="postSubmit()">Submit</button>
                     </form>
                     <table class="table table-bordered" ng-repeat="post in userData">
-                    <tr>
-                        <td>
+                        <tr>
                             <h3 class="moduletitle">{{ post.username }}</h3>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="posts in post.submission">
-                        <td>
-                            {{ posts.text }}
-                        </td>
-                        <td>
-                            {{ posts.dateTime }}
-                        </td>
-                    </tr>
+                        </tr>
+                        <tr ng-repeat="posts in post.submission">
+                            <td>
+                                {{ posts.text }}
+                            </td>
+                            <td>
+                                {{ posts.dateTime }}
+                            </td>
+                        </tr>
                     </table>
-                </div>
+                    <table class="table table-bordered">
+                        <tr ng-repeat="post in postData">
+                            <td>
+                                {{ post.text }}
+                            </td>
+                            <td>
+                                {{ post.dateTime }}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

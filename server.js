@@ -74,16 +74,35 @@ var sessionStore;
 	});
 
     //get the data back from the database relating to users
-    router.get('/posts/getPosts', function(req, res) {
+    router.get('/posts/getUserPosts', function(req, res) {
 
         //get all posts that have the username
-        UserPost.find({ 'username' :  sessionStore.username }, function(err, posts) {
+        UserPost.find({'username' : sessionStore.username}, function(err, posts) {
             var postMap = {};
 
             //get each post that has the username as the stored user
             posts.forEach(function(post) {
               postMap[post.submission] = post;
             });
+
+            //send all the data back in JSON
+            res.json(postMap);
+        });
+    });
+
+    //get the data back from the database relating to users
+    router.get('/posts/getAllPosts', function(req, res) {
+
+        //get all posts that have the username
+        UserPost.find({}, function(err, posts) {
+            var postMap = {};
+
+            //get each post that has the username as the stored user
+            posts.forEach(function(post) {
+              postMap[post] = post;
+            });
+
+            console.log(postMap);
 
             //send all the data back in JSON
             res.json(postMap);
@@ -100,39 +119,11 @@ var sessionStore;
 	//submit route for all posts without a user (4th Task)
 	router.post('/submit', function(req, res) {
 
-        //check if there was text submitted
-        if(req.body.text == '')
-        {
-            res.json({'error':'emptyText'});
-        }
-        else
-        {
-            //get data entered
-            var text = req.body.text;
+		//get the response from the function
+        var response = submitPost(req,res,"post");
 
-            // create the post
-            var newPost = new Post();
-
-            //add in the relevant details to be inserted
-            newPost.text = text;
-
-            //get the date and time
-            //format == YYYY:MM:DD:HH:MM:SS
-            var dateTime = getDateTime();
-
-            //store the dateTime
-            newPost.dateTime = dateTime;
-
-            //save in the database
-            newPost.save(function(err) {
-                if (err)
-                    console.log("User Create error");
-
-                //send the data back to be displayed
-                res.json({'user':'postCreated'});
-                res.end();
-            });
-        }
+        //send the json response
+        res.json(response);
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -230,6 +221,9 @@ var sessionStore;
         }
         else
         {
+        	//submit as a normal post
+        	submitPost(req,res,"userPost");
+
             //get data entered
             var text = req.body.text;
 
@@ -262,7 +256,7 @@ var sessionStore;
         }
     });
 
-	//default route error handling
+	//default route error handlings
 	//The 404 Route (ALWAYS Keep this as the last route)
 	router.get('*', function(req, res){
   		res.status(404).render('error.ejs');
@@ -274,8 +268,8 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	mongoose.connect(configDB.url); // connect to our external database
-	//mongoose.connect(configDB.urlLocal); // connect to our local database
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
@@ -309,6 +303,51 @@ function getDateTime() {
 
     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
 
+}
+
+function submitPost(req,res,flag)
+{
+	//check if there was text submitted
+    if(req.body.text == '')
+    {
+        return{'error':'emptyText'};
+    }
+    else
+    {
+        //get data entered
+        var text = req.body.text;
+
+        // create the post
+        var newPost = new UserPost();
+
+        //add in the relevant details to be inserted
+        newPost.text = text;
+
+        //get the date and time
+        //format == YYYY:MM:DD:HH:MM:SS
+        var dateTime = getDateTime();
+
+        if(flag == 'userPost')
+    	{
+    		newPost.username = sessionStore.username;
+    	}
+    	else
+    	{
+    		newPost.username = 'anon';
+    	}
+
+        //store the dateTime
+        newPost.dateTime = dateTime;
+
+        //save in the database
+        newPost.save(function(err) {
+            if (err)
+                console.log("User Create error");
+
+            //send the data back to be displayed
+            return {'user':'postCreated'};
+        });
+    }
 }
 
 module.exports = app;

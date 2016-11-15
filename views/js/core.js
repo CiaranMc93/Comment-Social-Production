@@ -7,7 +7,7 @@ userInfo.controller('mainController', function($scope, $http) {
     $scope.getResponse = function() {
 
         //check if the form has been created or not.
-        if ($scope.formData.username === undefined) {
+        if ($scope.formData === undefined) {
             console.error("error in posting");
         }
         else
@@ -30,7 +30,7 @@ userInfo.controller('mainController', function($scope, $http) {
     $scope.submitUser = function() {
 
         //check if the form has been created or not.
-        if ($scope.formData.username === undefined) {
+        if ($scope.formData === undefined) {
             console.error("error in posting");
         }
         else
@@ -53,7 +53,7 @@ userInfo.controller('mainController', function($scope, $http) {
     $scope.userSignup = function() {
 
         //check if the form has been created or not.
-        if ($scope.formData.username === undefined) {
+        if ($scope.formData === undefined) {
             console.error("error in posting");
         }
         else
@@ -85,7 +85,7 @@ userInfo.controller('mainController', function($scope, $http) {
     $scope.userLogin = function() {
 
         //check if the form has been created or not.
-        if ($scope.formData.username === undefined) {
+        if ($scope.formData === undefined) {
             console.error("error in posting");
         }
         else
@@ -119,10 +119,23 @@ userInfo.controller('getData', function($scope, $http) {
     //get the data when the submit post page is initialised
     $scope.getData = function() {
 
-        $http.get('/api/posts/getPosts',$scope.formData).
+        $http.get('/api/posts/getUserPosts',$scope.formData).
         success(function(data) {
             //bind our response data to our scope to use
             $scope.userData = data;
+            
+        }).error(function(data) {
+            console.error("error in posting");
+        })
+    }
+
+    //get the data when the submit post page is initialised
+    $scope.getAllPost = function() {
+
+        $http.get('/api/posts/getAllPosts',$scope.formData).
+        success(function(data) {
+            //bind our response data to our scope to use
+            $scope.postData = data;
             
         }).error(function(data) {
             console.error("error in posting");
@@ -133,7 +146,7 @@ userInfo.controller('getData', function($scope, $http) {
     $scope.postSubmit = function() {
 
         //check if the form has been created or not.
-        if ($scope.formData.text === undefined) {
+        if ($scope.formData === undefined) {
             console.error("error in posting");
         }
         else

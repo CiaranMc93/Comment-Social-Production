@@ -117,7 +117,7 @@ describe('Validate Data Sending and Database Functionality', function() {
 	it('Create Test Submission', function(done) {
 
 		// create the user
-        var newPost = new Post();
+        var newPost = new UserPost();
 
         //add in the relevant details to be inserted
         newPost.text = "testPost";
@@ -145,7 +145,7 @@ describe('Validate Data Sending and Database Functionality', function() {
 	it('Remove New Test Post', function(done) {
 
 		//remove the user so the test can pass
-	    Post.find({'text' : "testPost"}).remove(function(err){
+	    UserPost.find({'text' : "testPost"}).remove(function(err){
     		if (err)
             {
                 throw "error";
