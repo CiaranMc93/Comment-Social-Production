@@ -13,7 +13,7 @@
         </style>
     </head>
     <!-- SET THE CONTROLLER -->
-    <body ng-controller="mainController">
+    <body ng-controller="getData" ng-init="getData()">
         <div class="container">
             <!-- FORM TO SUBMIT DATA -->
             <div id="user-form" class="row">
@@ -21,9 +21,23 @@
                     <form id="userForm">
                         <!-- Create the inputs and submit button-->
                         <input type="text" ng-model="formData.text" placeholder="Enter text" />
-                        <button type="submit" class="btn btn-primary" ng-click="userSubmit()">Submit</button>
+                        <button type="submit" class="btn btn-primary" ng-click="postSubmit()">Submit</button>
                     </form>
-                    <p><b>{{userData}}</b></b></p>
+                    <table class="table table-bordered" ng-repeat="post in userData">
+                    <tr>
+                        <td>
+                            <h3 class="moduletitle">{{ post.username }}</h3>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="posts in post.submission">
+                        <td>
+                            {{ posts.text }}
+                        </td>
+                        <td>
+                            {{ posts.dateTime }}
+                        </td>
+                    </tr>
+                    </table>
                 </div>
                 </div>
             </div>

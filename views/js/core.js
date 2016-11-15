@@ -4,14 +4,125 @@ var userInfo = angular.module('userInfo', []);
 userInfo.controller('mainController', function($scope, $http) {
 
     //handle the submitUser functionality
-    $scope.submitTaskTwoAndThree = function() {
+    $scope.getResponse = function() {
 
-        $http.post('/api/response',$scope.formData).
+        //check if the form has been created or not.
+        if ($scope.formData.username === undefined) {
+            console.error("error in posting");
+        }
+        else
+        {
+
+            $http.post('/api/response',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
+                //clear the form
+                $("#userForm")[0].reset();
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
+    }
+
+    //handle the submitUser functionality
+    $scope.submitUser = function() {
+
+        //check if the form has been created or not.
+        if ($scope.formData.username === undefined) {
+            console.error("error in posting");
+        }
+        else
+        {
+
+            $http.post('/api/submit',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
+                //clear the form
+                $("#userForm")[0].reset();
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
+    }
+
+    //handle the userSignup functionality
+    $scope.userSignup = function() {
+
+        //check if the form has been created or not.
+        if ($scope.formData.username === undefined) {
+            console.error("error in posting");
+        }
+        else
+        {
+
+            $http.post('/api/signup',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
+
+                //redirect
+                if(data.redirect)
+                {
+                    window.location = data.redirect;
+                }
+                else
+                {
+                    //clear the form
+                    $("#userForm")[0].reset();
+                }
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
+    }
+
+    //handle the userLogin functionality
+    $scope.userLogin = function() {
+
+        //check if the form has been created or not.
+        if ($scope.formData.username === undefined) {
+            console.error("error in posting");
+        }
+        else
+        {
+            $http.post('/api/login',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
+
+                //redirect
+                if(data.redirect)
+                {
+                    window.location = data.redirect;
+                }
+                else
+                {
+                    //clear the form
+                    $("#userForm")[0].reset();
+                }
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
+    }
+});
+
+//define the controller
+userInfo.controller('getData', function($scope, $http) {
+
+    //get the data when the submit post page is initialised
+    $scope.getData = function() {
+
+        $http.get('/api/posts/getPosts',$scope.formData).
         success(function(data) {
             //bind our response data to our scope to use
             $scope.userData = data;
-            //clear the form
-            $("#userForm")[0].reset();
             
         }).error(function(data) {
             console.error("error in posting");
@@ -19,51 +130,34 @@ userInfo.controller('mainController', function($scope, $http) {
     }
 
     //handle the submitUser functionality
-    $scope.submitUser = function() {
+    $scope.postSubmit = function() {
 
-        $http.post('/api/submit',$scope.formData).
-        success(function(data) {
-            //bind our response data to our scope to use
-            $scope.userData = data;
-            //clear the form
-            $("#userForm")[0].reset();
-            
-        }).error(function(data) {
+        //check if the form has been created or not.
+        if ($scope.formData.text === undefined) {
             console.error("error in posting");
-        })
-    }
+        }
+        else
+        {
 
-    //handle the userSignup functionality
-    $scope.userSignup = function() {
+            $http.post('/api/posts/submitPost',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
 
-        $http.post('/api/signup',$scope.formData).
-        success(function(data) {
-            //bind our response data to our scope to use
-            $scope.userData = data;
-            //clear the form
-            $("#userForm")[0].reset();
-            
-        }).error(function(data) {
-            console.error("error in posting");
-        })
-    }
-
-    //handle the userLogin functionality
-    $scope.userLogin = function() {
-
-        $http.post('/api/login',$scope.formData).
-        success(function(data) {
-            //bind our response data to our scope to use
-            $scope.userData = data;
-
-            //redirect
-            window.location = data.redirect;
-
-            //clear the form
-            $("#userForm")[0].reset();
-            
-        }).error(function(data) {
-            console.error("error in posting");
-        })
+                //redirect
+                if(data.redirect)
+                {
+                    window.location = data.redirect;
+                }
+                else
+                {
+                    //clear the form
+                    $("#userForm")[0].reset();
+                }
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
     }
 });

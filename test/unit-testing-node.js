@@ -4,7 +4,8 @@ var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
 // load up the user model
-var User       = require('../models/user.js');
+var Post       = require('../models/post.js');
+var UserPost       = require('../models/userPost.js');
 var mongoose = require('mongoose');
 var configDB   = require('../config/database.js');
 //make sure promise deprecation warning is removed
@@ -116,16 +117,16 @@ describe('Validate Data Sending and Database Functionality', function() {
 	it('Create Test Submission', function(done) {
 
 		// create the user
-        var newPost = new User();
+        var newPost = new Post();
 
         //add in the relevant details to be inserted
-        newPost.submission.text = "testPost";
+        newPost.text = "testPost";
 
         //get the date and time
         //format == YYYY:MM:DD:HH:MM:SS
         var dateTime = getDateTime();
 
-        newPost.submission.dateTime = dateTime;
+        newPost.dateTime = dateTime;
 
         //save the user
         newPost.save(function(err) {
@@ -144,7 +145,7 @@ describe('Validate Data Sending and Database Functionality', function() {
 	it('Remove New Test Post', function(done) {
 
 		//remove the user so the test can pass
-	    User.find({'submission.text' : "testPost"}).remove(function(err){
+	    Post.find({'text' : "testPost"}).remove(function(err){
     		if (err)
             {
                 throw "error";
