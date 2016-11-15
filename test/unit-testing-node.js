@@ -3,7 +3,6 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
-var testDB = require("../models/test.js");
 // load up the user model
 var User       = require('../models/user.js');
 var mongoose = require('mongoose');
