@@ -173,4 +173,27 @@ userInfo.controller('getData', function($scope, $http) {
             })
         }
     }
+
+    //handle the submitUser functionality
+    $scope.reply = function() {
+
+        //check if the form has been created or not.
+        if ($scope.formData === undefined) {
+            console.error("error in posting");
+        }
+        else
+        {
+
+            $http.get('/api/posts/reply',$scope.formData).
+            success(function(data) {
+                //bind our response data to our scope to use
+                $scope.userData = data;
+
+                console.log(data);
+                
+            }).error(function(data) {
+                console.error("error in posting");
+            })
+        }
+    }
 });
