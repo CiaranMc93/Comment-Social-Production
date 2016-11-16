@@ -99,10 +99,17 @@ var sessionStore;
 
             //get each post that has the username as the stored user
             posts.forEach(function(post) {
-              postMap[post] = post;
-            });
 
-            console.log(postMap);
+                //make sure there are no undefined text posts
+                if(post.text === undefined)
+                {   
+
+                }
+                else
+                {
+                    postMap[post] = post;
+                }
+            });
 
             //send all the data back in JSON
             res.json(postMap);
@@ -136,25 +143,27 @@ var sessionStore;
 		var username = req.body.username;
 
 		//check if the username entered is taken
-		UserPost.findOne({ 'username' :  req.body.username }, function(err, user) {
+		UserPost.findOne({ 'username' :  username }, function(err, user) {
             // if there are any errors, return the error
-            if (err || req.body.username == '')
+            if (err || username == '')
             {
             	//send the data back as it is already json
-				res.json({'user':'notCreated'});
+				res.send({'user':'notCreated'});
             }
-
-            // check to see if theres already a user with that email and login
-            if (user) 
+            else
             {
-            	//store the username when logged in
-            	sessionStore.username = username;
-                //send the data back to be displayed
-				res.send({redirect : '/api/posts'});
-                res.end();
+                // check to see if theres already a user with that email and login
+                if (user) 
+                {
+                    //store the username when logged in
+                    sessionStore.username = username;
+                    //send the data back to be displayed
+                    res.send({redirect : '/api/posts'});
+                    res.end();
 
-            } else {
-                res.json({'user':'User Does not Exist'});
+                } else {
+                    res.json({'user':'User Does not Exist'});
+                }
             }
         });
 	});
@@ -174,39 +183,41 @@ var sessionStore;
             if (err || req.body.username == '')
             {
             	//send the data back as it is already json
-				res.json({'user':'User Form is Empty'});
+				res.send({'user':'User Form is Empty'});
             }
-
-            // check to see if theres already a user with that username
-            if (user) 
+            else
             {
-                res.json({'user':'User Exists Already'});
-            } else {
-                // create the user
-                var newUserPost = new UserPost();
+                // check to see if theres already a user with that username
+                if (user) 
+                {
+                    res.send({'user':'User Exists Already'});
+                } else {
+                    // create the user
+                    var newUserPost = new UserPost();
 
-                //add in the relevant details to be inserted
-                newUserPost.username = username;
+                    //add in the relevant details to be inserted
+                    newUserPost.username = username;
 
-                //get the date and time
-                //format == YYYY:MM:DD:HH:MM:SS
-                var dateTime = getDateTime();
+                    //get the date and time
+                    //format == YYYY:MM:DD:HH:MM:SS
+                    var dateTime = getDateTime();
 
-                newUserPost.submission.dateTime = dateTime;
-                //default text
-                newUserPost.submission.text = "";
+                    newUserPost.submission.dateTime = dateTime;
+                    //default text
+                    newUserPost.submission.text = "";
 
-                //save in the database
-                newUserPost.save(function(err) {
-                    if (err)
-                        console.log("User Create error");
+                    //save in the database
+                    newUserPost.save(function(err) {
+                        if (err)
+                            console.log("User Create error");
 
-                    //store the username when logged in
-                    sessionStore.username = username;
-                    //send the data back to be displayed
-                    res.send({redirect : '/api/posts'});
-                    res.end();
-                });
+                        //store the username when logged in
+                        sessionStore.username = username;
+                        //send the data back to be displayed
+                        res.send({redirect : '/api/posts'});
+                        res.end();
+                    });
+                }
             }
         });
 	});

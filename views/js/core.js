@@ -130,7 +130,7 @@ userInfo.controller('getData', function($scope, $http) {
     }
 
     //get the data when the submit post page is initialised
-    $scope.getAllPost = function() {
+    $scope.getAllPosts = function() {
 
         $http.get('/api/posts/getAllPosts',$scope.formData).
         success(function(data) {
