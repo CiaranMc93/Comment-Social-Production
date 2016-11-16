@@ -339,7 +339,7 @@ describe('Check Login/Signup and User Posting', function() {
             {
             	done();
             	//exit the process for continuous integration build
-            	//process.exit();
+            	process.exit();
             }
 		});
 	});
