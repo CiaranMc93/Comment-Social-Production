@@ -3,7 +3,12 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
+<<<<<<< HEAD
 var UserPost       = require('../models/userPost.js');
+=======
+// load up the user model
+var User       = require('../models/user.js');
+>>>>>>> master
 var mongoose = require('mongoose');
 var configDB   = require('../config/database.js');
 //make sure promise deprecation warning is removed

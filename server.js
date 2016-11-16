@@ -177,6 +177,7 @@ var sessionStore;
 		//get data entered
 		var username = req.body.username;
 
+<<<<<<< HEAD
 		//check if the username entered is taken
 		UserPost.findOne({ 'username' :  username }, function(err, user) {
             // if there are any errors, return the error
@@ -225,6 +226,8 @@ var sessionStore;
     //when a person is logged in, the posts will be submitted here
     router.post('/posts/submitPost', function(req, res, next) {
 
+=======
+>>>>>>> master
         //check if there was text submitted
         if(req.body.text == '')
         {
@@ -232,6 +235,7 @@ var sessionStore;
         }
         else
         {
+<<<<<<< HEAD
         	//submit as a normal post
         	submitPost(req,res,"userPost");
 
@@ -266,6 +270,18 @@ var sessionStore;
             );
         }
     });
+=======
+            //get data entered
+            var text = req.body.text;
+
+            //check if the username entered is taken
+            User.find({ 'user.username' :  req.body.username }, function(err, user) {
+                console.log(user);
+                res.json(user);
+            });
+        }
+	});
+>>>>>>> master
 
 	//default route error handlings
 	//The 404 Route (ALWAYS Keep this as the last route)

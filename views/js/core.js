@@ -129,8 +129,13 @@ userInfo.controller('getData', function($scope, $http) {
         })
     }
 
+<<<<<<< HEAD
     //get the data when the submit post page is initialised
     $scope.getAllPosts = function() {
+=======
+    //handle the submitPost functionality for 4th task
+    $scope.submitPost = function() {
+>>>>>>> master
 
         $http.get('/api/posts/getAllPosts',$scope.formData).
         success(function(data) {
@@ -142,6 +147,7 @@ userInfo.controller('getData', function($scope, $http) {
         })
     }
 
+<<<<<<< HEAD
     //handle the submitUser functionality
     $scope.postSubmit = function() {
 
@@ -172,5 +178,20 @@ userInfo.controller('getData', function($scope, $http) {
                 console.error("error in posting");
             })
         }
+=======
+    //handle the submitUser functionality for the 5th task
+    $scope.submitUser = function() {
+
+        $http.post('/api/login',$scope.formData).
+        success(function(data) {
+            //bind our response data to our scope to use
+            $scope.userData = data;
+            //clear the form
+            $("#userForm")[0].reset();
+            
+        }).error(function(data) {
+            console.error("error in posting");
+        })
+>>>>>>> master
     }
 });
