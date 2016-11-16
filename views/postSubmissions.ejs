@@ -1,0 +1,58 @@
+<!doctype html>
+<html ng-app="userInfo">
+    <head>
+        <title>Comment Social</title>
+        <!-- External styling -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <script type="text/javascript" src="/jquery/dist/jquery.min.js"></script> 
+        <script src="/angular/angular.min.js"></script>
+        <script src="/js/core.js"></script>
+        <link href="/css/submissions.css" rel="stylesheet" type="text/css" />
+        <style>
+            body         { padding-top:80px; }
+        </style>
+    </head>
+    <!-- SET THE CONTROLLER -->
+    <body ng-controller="getData" ng-init="getData()">
+        <div class="container">
+            <!-- FORM TO SUBMIT DATA -->
+            <div id="user-form" class="row">
+                <form class="col-sm-8 col-sm-offset-2 text-center" id="post-form">
+                    <!-- Create the inputs and submit button-->
+                    <input type="text" ng-model="formData.text" placeholder="Enter text" />
+                    <button type="submit" class="btn btn-primary" ng-click="postSubmit()">Submit</button>
+                </form>
+            </div>
+            <div class="container">
+                <table id="userposts" class="table table-bordered text-center" ng-repeat="post in userData">
+                    <tr ng-repeat="posts in post.submission">
+                         <td colspan='50%'>
+                             <p><b>{{ post.username }}:</b> {{ posts.text }}</p>
+                        </td>
+                        <td colspan='50%'>
+                            {{ posts.dateTime }}
+                        </td>
+                    </tr>
+                </table>
+                <!-- Create a table for all posts -->
+                <table id="allposts" class="table table-bordered text-center" ng-init="getAllPosts()">
+                    <tr>
+                        <td colspan='100%'>
+                            <h3 class="moduletitle">All Posts</h3>
+                        </td>
+                    </tr>
+                    <!-- Loop through each post and show the details -->
+                    <tr ng-repeat="post in postData">
+                        <td colspan='50%'>
+                            <p><b>{{ post.username }}:</b> {{ post.text }}</p>
+                        </td>
+                        <td colspan='50%'>
+                            <p>{{ post.dateTime }}</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

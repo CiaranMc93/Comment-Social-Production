@@ -1,6 +1,7 @@
 //server.js
 // get all the tools we need ===================================================
 var express    = require('express');
+var session    = require('express-session');
 var app 	   = express();
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
@@ -9,8 +10,9 @@ var HttpStatus = require('http-status-codes');
 //secure the application
 var helmet = require('helmet');
 var router 	   = express.Router();              // get an instance of the express Router
-// load up the user model
-var User       = require('./models/user.js');
+// load up the models
+var Post       = require('./models/post.js');
+var UserPost       = require('./models/userPost.js');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -20,7 +22,16 @@ app.use(bodyParser.json());
 //our app can use these static files
 app.use(express.static('node_modules'));
 app.use(express.static('views'));
+//session management
+app.use(session({
+    secret: '113547411993',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(helmet());
+
+//session storage variable
+var sessionStore;
 
 	//set up the port we want to run on
 	var port     = process.env.PORT || 8080;
@@ -33,7 +44,7 @@ app.use(helmet());
 
     //default route
     router.get('/', function(req, res) {
-        res.render('submit.ejs');
+        res.render('login.ejs');
     });
 
 	// ROUTES FOR OUR API
@@ -43,18 +54,67 @@ app.use(helmet());
 	    res.render('helloworld.ejs');
 	});
 
-	//this route will demonstrate the the second and third task
+	//this route will demonstrate the the third task
 	router.get('/response', function(req, res) {
-	    res.render('respond.ejs');
+	    res.render('viewJSONResponse.ejs');
 	});
 
 	router.get('/submit', function(req, res) {
-	    res.render('submit.ejs');
+	    res.render('submitPost.ejs');
 	});
 
 	router.get('/login', function(req, res) {
 	    res.render('login.ejs');
 	});
+
+    //render the submit posts file
+	router.get('/posts', function(req, res) {
+	    res.render('postSubmissions.ejs');
+	    res.end();
+	});
+
+    //get the data back from the database relating to users
+    router.get('/posts/getUserPosts', function(req, res) {
+
+        //get all posts that have the username
+        UserPost.find({'username' : sessionStore.username}, function(err, posts) {
+            var postMap = {};
+
+            //get each post that has the username as the stored user
+            posts.forEach(function(post) {
+              postMap[post.submission] = post;
+            });
+
+            //send all the data back in JSON
+            res.json(postMap);
+        });
+    });
+
+    //get the data back from the database relating to users
+    router.get('/posts/getAllPosts', function(req, res) {
+
+        //get all posts that have the username
+        UserPost.find({}, function(err, posts) {
+            var postMap = {};
+
+            //get each post that has the username as the stored user
+            posts.forEach(function(post) {
+
+                //make sure there are no undefined text posts
+                if(post.text === undefined)
+                {   
+
+                }
+                else
+                {
+                    postMap[post] = post;
+                }
+            });
+
+            //send all the data back in JSON
+            res.json(postMap);
+        });
+    });
 
 	//second and third task
 	router.post('/response', function(req, res) {
@@ -63,9 +123,111 @@ app.use(helmet());
 		res.end();
 	});
 
-	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+	//submit route for all posts without a user (4th Task)
 	router.post('/submit', function(req, res) {
 
+		//get the response from the function
+        var response = submitPost(req,res,"post");
+
+        //send the json response
+        res.json(response);
+	});
+
+	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+	router.post('/login', function(req, res, next) {
+
+		//get the session
+		sessionStore = req.session;
+
+		//get data entered
+		var username = req.body.username;
+
+		//check if the username entered is taken
+		UserPost.findOne({ 'username' :  username }, function(err, user) {
+            // if there are any errors, return the error
+            if (err || username == '')
+            {
+            	//send the data back as it is already json
+				res.send({'user':'notCreated'});
+            }
+            else
+            {
+                // check to see if theres already a user with that email and login
+                if (user) 
+                {
+                    //store the username when logged in
+                    sessionStore.username = username;
+                    //send the data back to be displayed
+                    res.send({redirect : '/api/posts'});
+                    res.end();
+
+                } else {
+                    res.json({'user':'User Does not Exist'});
+                }
+            }
+        });
+	});
+
+	//Allow users to sign up.
+	router.post('/signup', function(req, res, next) {
+
+        //get the session
+        sessionStore = req.session;
+
+		//get data entered
+		var username = req.body.username;
+
+<<<<<<< HEAD
+		//check if the username entered is taken
+		UserPost.findOne({ 'username' :  username }, function(err, user) {
+            // if there are any errors, return the error
+            if (err || req.body.username == '')
+            {
+            	//send the data back as it is already json
+				res.send({'user':'User Form is Empty'});
+            }
+            else
+            {
+                // check to see if theres already a user with that username
+                if (user) 
+                {
+                    res.send({'user':'User Exists Already'});
+                } else {
+                    // create the user
+                    var newUserPost = new UserPost();
+
+                    //add in the relevant details to be inserted
+                    newUserPost.username = username;
+
+                    //get the date and time
+                    //format == YYYY:MM:DD:HH:MM:SS
+                    var dateTime = getDateTime();
+
+                    newUserPost.submission.dateTime = dateTime;
+                    //default text
+                    newUserPost.submission.text = "";
+
+                    //save in the database
+                    newUserPost.save(function(err) {
+                        if (err)
+                            console.log("User Create error");
+
+                        //store the username when logged in
+                        sessionStore.username = username;
+                        //send the data back to be displayed
+                        res.send({redirect : '/api/posts'});
+                        res.end();
+                    });
+                }
+            }
+        });
+	});
+
+    //when a person is logged in, the posts will be submitted here
+    router.post('/posts/submitPost', function(req, res, next) {
+
+=======
+>>>>>>> master
         //check if there was text submitted
         if(req.body.text == '')
         {
@@ -73,47 +235,42 @@ app.use(helmet());
         }
         else
         {
+<<<<<<< HEAD
+        	//submit as a normal post
+        	submitPost(req,res,"userPost");
+
             //get data entered
             var text = req.body.text;
-
-            // create the post
-            var newPost = new User();
-
-            //add in the relevant details to be inserted
-            newPost.submission.text = text;
 
             //get the date and time
             //format == YYYY:MM:DD:HH:MM:SS
             var dateTime = getDateTime();
 
-            //store the dateTime
-            newPost.submission.dateTime = dateTime;
+            var submission = {
+                text: text,
+                dateTime: dateTime
+            };
 
             //save in the database
-            newPost.save(function(err) {
-                if (err)
-                    console.log("User Create error");
+            // find by some conditions and update
+            UserPost.findOneAndUpdate(
+                {username: sessionStore.username},
+                //add a submission to the submission array {$push: {array of submissions : current submission}}
+                {$push: {submission: submission}},
+                {safe: true, upsert: true},
+                function(err, model) {
+                    if(err)
+                        console.log(err);
 
-                //send the data back to be displayed
-                res.json({'user':'postCreated'});
-            });
+
+                    //refresh the page with the new data when a new post is submitted
+                    res.send({redirect : '/api/posts'});
+                    next();
+                }
+            );
         }
-		
-	});
-
-	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.post('/login', function(req, res) {
-
-		//get data entered
-		var username = req.body.username;
-
-        //check if there was text submitted
-        if(req.body.text == '')
-        {
-            res.json({'error':'emptyText'});
-        }
-        else
-        {
+    });
+=======
             //get data entered
             var text = req.body.text;
 
@@ -124,8 +281,9 @@ app.use(helmet());
             });
         }
 	});
+>>>>>>> master
 
-	//default route error handling
+	//default route error handlings
 	//The 404 Route (ALWAYS Keep this as the last route)
 	router.get('*', function(req, res){
   		res.status(404).render('error.ejs');
@@ -172,6 +330,51 @@ function getDateTime() {
 
     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
 
+}
+
+function submitPost(req,res,flag)
+{
+	//check if there was text submitted
+    if(req.body.text == '')
+    {
+        return{'error':'emptyText'};
+    }
+    else
+    {
+        //get data entered
+        var text = req.body.text;
+
+        // create the post
+        var newPost = new UserPost();
+
+        //add in the relevant details to be inserted
+        newPost.text = text;
+
+        //get the date and time
+        //format == YYYY:MM:DD:HH:MM:SS
+        var dateTime = getDateTime();
+
+        if(flag == 'userPost')
+    	{
+    		newPost.username = sessionStore.username;
+    	}
+    	else
+    	{
+    		newPost.username = 'anon';
+    	}
+
+        //store the dateTime
+        newPost.dateTime = dateTime;
+
+        //save in the database
+        newPost.save(function(err) {
+            if (err)
+                console.log("User Create error");
+
+            //send the data back to be displayed
+            return {'user':'postCreated'};
+        });
+    }
 }
 
 module.exports = app;

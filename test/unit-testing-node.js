@@ -3,8 +3,12 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
+<<<<<<< HEAD
+var UserPost       = require('../models/userPost.js');
+=======
 // load up the user model
 var User       = require('../models/user.js');
+>>>>>>> master
 var mongoose = require('mongoose');
 var configDB   = require('../config/database.js');
 //make sure promise deprecation warning is removed
@@ -113,19 +117,34 @@ describe('Validate Data Sending and Database Functionality', function() {
 	    });
 	});
 
+	it('Check Date Time Function', function(done) {
+		//access the function
+        var dateTime = getDateTime();
+
+        if(dateTime.length > 10)
+        {
+        	done();
+        }
+        else
+        {
+        	throw "Date Time Function did not return correct data."
+        }
+    });
+       
+
 	it('Create Test Submission', function(done) {
 
 		// create the user
-        var newPost = new User();
+        var newPost = new UserPost();
 
         //add in the relevant details to be inserted
-        newPost.submission.text = "testPost";
+        newPost.text = "testPost";
 
         //get the date and time
         //format == YYYY:MM:DD:HH:MM:SS
         var dateTime = getDateTime();
 
-        newPost.submission.dateTime = dateTime;
+        newPost.dateTime = dateTime;
 
         //save the user
         newPost.save(function(err) {
@@ -135,22 +154,35 @@ describe('Validate Data Sending and Database Functionality', function() {
             } else
             {
             	done();
-            	//exit the process for continuous integration build
-            	process.exit();
+            	
             }
 
         });
 	});
+
+	it('Remove New Test Post', function(done) {
+
+		//remove the user so the test can pass
+	    UserPost.find({'text' : "testPost"}).remove(function(err){
+    		if (err)
+            {
+                throw "error";
+            } else
+            {
+            	done();
+            }
+		});
+	});
 });
 
-/*//testing the 5th task
-describe('Validate Data Sending and Database Functionality', function() {
+//testing the 5th task
+describe('Check Login/Signup and User Posting', function() {
 
 	it('Check Empty Username', function(done) {
 	chai.request(server)
 		//get the correct route to test
 	    .post('/api/login')
-	    .send({'username':'','password':'testPassword'})
+	    .send({'username':''})
 	    .end(function(err, res){
 	    	//test assertions about the code.
 		    res.should.have.status(200);
@@ -163,20 +195,47 @@ describe('Validate Data Sending and Database Functionality', function() {
 	    });
 	});
 
+	it('Check User Does Not Exist', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/login')
+	    .send({'username':'errorTestUser'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('User Does not Exist');
+		    done();
+	    });
+	});
+
+	it('Check User Signup Form is Empty', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/signup')
+	    .send({'username':''})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('User Form is Empty');
+		    done();
+	    });
+	});
+
 	it('Create Test User', function(done) {
 
 		// create the user
-        var newUser = new User();
+        var newUser = new UserPost();
 
         //add in the relevant details to be inserted
-        newUser.local.username = "testUser";
-        newUser.local.password = "testPassword";
-
-        //get the date and time
-        //format == YYYY:MM:DD:HH:MM:SS
-        var dateTime = getDateTime();
-
-        newUser.info.dateTime = dateTime;
+        newUser.username = "testUser";
 
         //save the user
         newUser.save(function(err) {
@@ -191,25 +250,93 @@ describe('Validate Data Sending and Database Functionality', function() {
         });
 	});
 
-	it('Verify New Test User', function(done) {
+	it('Check User Already Signed Up', function(done) {
+	chai.request(server)
+		//get the correct route to test
+	    .post('/api/signup')
+	    .send({'username':'testUser'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('user');
+		    res.body.user.should.equal('User Exists Already');
+		    done();
+	    });
+	});
 
-		//check if the username entered is taken
-		User.findOne({ 'local.username' :  'testUser' }, function(err, user) {
-			 // check to see if theres already a user with that email
-            if (user) 
-            {
-            	//passed
-                done();
-            } else {
-            	throw "error";
-            }
-		});
+	it('Get All Posts Check', function(done) {
+		chai.request(server)
+		//get the correct route to test
+	    .get('/api/posts/getAllPosts')
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    //check that the returned data is an object
+		    res.body.should.be.instanceof(Object);
+		    done();
+	    });
+	});
+
+	it('Insert Test Submission for Test User', function(done) {
+
+		//get data entered
+	    var text = "testText";
+
+	    //get the date and time
+	    //format == YYYY:MM:DD:HH:MM:SS
+	    var dateTime = getDateTime();
+
+	    var submission = {
+	        text: text,
+	        dateTime: dateTime
+	    };
+
+	    //save in the database
+	    // find by some conditions and update
+	    UserPost.findOneAndUpdate(
+	        {username: "testUser"},
+	        //add a submission to the submission array {$push: {array of submissions : current submission}}
+	        {$push: {submission: submission}},
+	        {safe: true, upsert: true},
+	        function(err, model) {
+	            if(err)
+	                throw err;
+
+	            //test complete
+	            done();
+	        }
+	    );
+	});
+
+	it('Check if a User Made a Post', function(done) {
+
+		//get all posts that have the username
+        UserPost.find({'username' : 'testUser'}, function(err, posts) {
+            var postMap = {};
+
+            //get each post that has the username as the stored user
+            posts.forEach(function(post) {
+
+            	//check the first object in the array as the test will only have 1 object
+                if(post.submission[0].text == "testText")
+                {
+              	  done();
+                }
+                else
+                {
+              	  throw "There is no post by user: testUser";
+                }
+            });
+        });
 	});
 
 	it('Remove New Test User', function(done) {
 
 		//remove the user so the test can pass
-	    User.find({'local.username' : "testUser"}).remove(function(err){
+	    UserPost.find({'username' : "testUser"}).remove(function(err){
     		if (err)
             {
                 throw "error";
@@ -222,7 +349,7 @@ describe('Validate Data Sending and Database Functionality', function() {
 		});
 	});
 });
-*/
+
 
 //get date time function
 function getDateTime() {
