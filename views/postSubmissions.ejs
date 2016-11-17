@@ -25,36 +25,23 @@
                 </form>
             </div>
             <div class="container">
-                <table id="userposts" class="table table-bordered text-center">
-                    <tr>
-                        <td colspan='100%'>
-                            <h3 class="moduletitle">User Posts</h3>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="post in userData">
-                         <td colspan='50%'>
-                             <p><b>{{ post.username }}:</b> {{ post.text }}</p>
-                        </td>
-                        <td colspan='50%'>
-                            {{ post.dateTime }}
-                        </td>
-                    </tr>
-                </table>
+                <div id="userposts">
+                    <h3 class="moduletitle text-center">User Posts</h3>
+                    <ul ng-repeat="post in userData">
+                        <li id="post"><a ng-click="reply(post._id)"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</a></li>
+                    </ul>
+                </div>
                 <!-- Create a table for all posts -->
-                <table id="allposts" class="table table-bordered text-center" ng-init="getAllPosts()">
-                    <tr>
-                        <td colspan='100%'>
-                            <h3 class="moduletitle">All Posts</h3>
-                        </td>
-                    </tr>
+                <div id="allposts" ng-init="getAllPosts()">
+                    <h3 class="moduletitle text-center">All Posts</h3>
                     <!-- Loop through each post and show the details -->
                     <ul ng-repeat="post in postData">
-                        <li><a ng-click="reply(post._id)"><p><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</p></a></li>
-                        <li ng-repeat="reply in post.replies" style="margin-left: 5px" colspan='100%'>
-                            <a><p><b>{{ reply.username }}</b> posted:  {{ reply.text }} at {{ reply.dateTime }}</p></a>
+                        <li id="post"><a ng-click="reply(post._id)"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</a></li>
+                        <li id="reply" ng-repeat="reply in post.replies">
+                            <b>{{ reply.username }}</b> posted:  {{ reply.text }} at {{ reply.dateTime }}
                         </li>
                     </ul>
-                </table>
+                </div>
             </div>
         </div>
     </body>

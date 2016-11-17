@@ -119,11 +119,14 @@ var sessionStore;
         UserPost.find({'username' : sessionStore.username}, function(err, posts) {
             var postMap = {};
 
+            console.log(posts);
+
             //get each post that has the username as the stored user
             posts.forEach(function(post) {
-              postMap[post.submission] = post;
+              postMap[post] = post;
             });
 
+            console.log(postMap);
             //send all the data back in JSON
             res.json(postMap);
         });
