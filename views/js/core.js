@@ -1,5 +1,13 @@
 var userInfo = angular.module('userInfo', []);
 
+// Create the factory that share the Data
+userInfo.factory('Post', function(data){
+
+    var myData = data;
+    
+  return { Field: '' };
+});
+
 //define the controller
 userInfo.controller('mainController', function($scope, $http) {
 
@@ -65,6 +73,8 @@ userInfo.controller('mainController', function($scope, $http) {
             success(function(data) {
                 //bind our response data to our scope to use
                 $scope.userData = data;
+
+                $("#userForm")[0] = "";
 
                 //redirect
                 if(data.redirect)
@@ -158,8 +168,6 @@ userInfo.controller('getData', function($scope, $http) {
 
             $http.post('/api/posts/submitPost',$scope.formData).
             success(function(data) {
-                //bind our response data to our scope to use
-                $scope.userData = data;
 
                 //redirect
                 if(data.redirect)
@@ -179,13 +187,14 @@ userInfo.controller('getData', function($scope, $http) {
         }
     }
 
-    //handle the submitUser functionality
+    //handle the reply option
     $scope.reply = function(id) {
 
-        $http.get('/api/posts/reply',$scope.formData).
+        $http.post('/api/posts/replyTo', {'_id': id}).
         success(function(data) {
-            //bind our response data to our scope to use
+
             $scope.userData = data;
+            window.location = '/api/posts/reply';
             
         }).error(function(data) {
             console.error("error in posting");

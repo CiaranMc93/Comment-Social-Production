@@ -1,6 +1,5 @@
 // load the things we need
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 
 // define the schema for our user model
 var userPostSchema = mongoose.Schema({
@@ -8,18 +7,15 @@ var userPostSchema = mongoose.Schema({
 	username : String,
 	text : String,
 	dateTime : String,
+	//check if the post is a reply or not
+	isReply : Boolean,
 
-	submission : [{
-		text : String,
-		dateTime : String
-	}],
-
-	reply : {
-		parentID : String,
+	//capture all the replies for this 
+	replies : [{
 		username : String,
-		text : String,
-		dateTime : String
-	}
+		text: String,
+		dateTime : String,
+	}]
 });
 
 

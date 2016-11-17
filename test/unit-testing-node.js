@@ -3,6 +3,7 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect();
 var server = require('../server.js');
 var should = chai.should();
+var User      = require('../models/user.js');
 var UserPost       = require('../models/userPost.js');
 var mongoose = require('mongoose');
 var configDB   = require('../config/database.js');
@@ -227,7 +228,7 @@ describe('Check Login/Signup and User Posting', function() {
 	it('Create Test User', function(done) {
 
 		// create the user
-        var newUser = new UserPost();
+        var newUser = new User();
 
         //add in the relevant details to be inserted
         newUser.username = "testUser";
@@ -273,59 +274,6 @@ describe('Check Login/Signup and User Posting', function() {
 		    res.body.should.be.instanceof(Object);
 		    done();
 	    });
-	});
-
-	it('Insert Test Submission for Test User', function(done) {
-
-		//get data entered
-	    var text = "testText";
-
-	    //get the date and time
-	    //format == YYYY:MM:DD:HH:MM:SS
-	    var dateTime = getDateTime();
-
-	    var submission = {
-	        text: text,
-	        dateTime: dateTime
-	    };
-
-	    //save in the database
-	    // find by some conditions and update
-	    UserPost.findOneAndUpdate(
-	        {username: "testUser"},
-	        //add a submission to the submission array {$push: {array of submissions : current submission}}
-	        {$push: {submission: submission}},
-	        {safe: true, upsert: true},
-	        function(err, model) {
-	            if(err)
-	                throw err;
-
-	            //test complete
-	            done();
-	        }
-	    );
-	});
-
-	it('Check if a User Made a Post', function(done) {
-
-		//get all posts that have the username
-        UserPost.find({'username' : 'testUser'}, function(err, posts) {
-            var postMap = {};
-
-            //get each post that has the username as the stored user
-            posts.forEach(function(post) {
-
-            	//check the first object in the array as the test will only have 1 object
-                if(post.submission[0].text == "testText")
-                {
-              	  done();
-                }
-                else
-                {
-              	  throw "There is no post by user: testUser";
-                }
-            });
-        });
 	});
 
 	it('Remove New Test User', function(done) {
