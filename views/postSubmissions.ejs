@@ -45,7 +45,7 @@
                     <!-- Loop through each post and show the details -->
                     <tr ng-repeat="post in postData">
                         <td colspan='100%'>
-                            <a ng-click="reply()"><p><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</p></a>
+                            <a ng-click="reply(post._id)"><p><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</p></a>
                         </td>
                     </tr>
                 </table>

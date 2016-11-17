@@ -12,7 +12,14 @@ var userPostSchema = mongoose.Schema({
 	submission : [{
 		text : String,
 		dateTime : String
-	}]
+	}],
+
+	reply : {
+		parentID : String,
+		username : String,
+		text : String,
+		dateTime : String
+	}
 });
 
 
