@@ -91,6 +91,13 @@ var sessionStore;
     });
 
     //get the data back from the database relating to users
+    router.get('/posts/reply', function(req, res) {
+
+        //send all the data back in JSON
+        res.json({"user":"reply"});
+    });
+
+    //get the data back from the database relating to users
     router.get('/posts/getAllPosts', function(req, res) {
 
         //get all posts that have the username
@@ -279,8 +286,8 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	mongoose.connect(configDB.url); // connect to our external database
-	//mongoose.connect(configDB.urlLocal); // connect to our local database
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again

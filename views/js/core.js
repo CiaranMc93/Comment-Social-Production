@@ -19,6 +19,7 @@ userInfo.controller('mainController', function($scope, $http) {
                 $scope.userData = data;
                 //clear the form
                 $("#userForm")[0].reset();
+                $("#userForm")[0] = "";
                 
             }).error(function(data) {
                 console.error("error in posting");
@@ -42,6 +43,7 @@ userInfo.controller('mainController', function($scope, $http) {
                 $scope.userData = data;
                 //clear the form
                 $("#userForm")[0].reset();
+                $("#userForm")[0] = "";
                 
             }).error(function(data) {
                 console.error("error in posting");
@@ -73,6 +75,7 @@ userInfo.controller('mainController', function($scope, $http) {
                 {
                     //clear the form
                     $("#userForm")[0].reset();
+                    $("#userForm")[0] = "";
                 }
                 
             }).error(function(data) {
@@ -104,6 +107,7 @@ userInfo.controller('mainController', function($scope, $http) {
                 {
                     //clear the form
                     $("#userForm")[0].reset();
+                    $("#userForm")[0] = "";
                 }
                 
             }).error(function(data) {
@@ -166,11 +170,25 @@ userInfo.controller('getData', function($scope, $http) {
                 {
                     //clear the form
                     $("#userForm")[0].reset();
+                    $("#userForm")[0] = "";
                 }
                 
             }).error(function(data) {
                 console.error("error in posting");
             })
         }
+    }
+
+    //handle the submitUser functionality
+    $scope.reply = function(id) {
+
+        $http.get('/api/posts/reply',$scope.formData).
+        success(function(data) {
+            //bind our response data to our scope to use
+            $scope.userData = data;
+            
+        }).error(function(data) {
+            console.error("error in posting");
+        })
     }
 });
