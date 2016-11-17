@@ -302,7 +302,7 @@ var sessionStore;
             //save in the database
             // find by some conditions and update
             UserPost.findOneAndUpdate(
-                {username: sessionStore.post.username},
+                {_id: sessionStore.post._id},
                 //add a submission to the submission array {$push: {array of submissions : current submission}}
                 {$push: {replies: replies}},
                 {safe: true, upsert: true},
@@ -400,15 +400,15 @@ function submitPost(req,res,flag)
 
         //store the dateTime
         newPost.dateTime = dateTime;
-        newPost.isReply = false;
 
         //save in the database
         newPost.save(function(err) {
             if (err)
                 console.log("User Create error");
 
-            //send the data back to be displayed
-            return {'user':'postCreated'};
+            //refresh the page with the new data when a new post is submitted
+            res.send({redirect : '/api/posts'});
+            res.end();
         });
     }
 }

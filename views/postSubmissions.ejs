@@ -48,11 +48,12 @@
                         </td>
                     </tr>
                     <!-- Loop through each post and show the details -->
-                    <tr ng-repeat="post in postData">
-                        <td colspan='100%'>
-                            <a ng-click="reply(post._id)"><p><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</p></a>
-                        </td>
-                    </tr>
+                    <ul ng-repeat="post in postData">
+                        <li><a ng-click="reply(post._id)"><p><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</p></a></li>
+                        <li ng-repeat="reply in post.replies" style="margin-left: 5px" colspan='100%'>
+                            <a><p><b>{{ reply.username }}</b> posted:  {{ reply.text }} at {{ reply.dateTime }}</p></a>
+                        </li>
+                    </ul>
                 </table>
             </div>
         </div>
