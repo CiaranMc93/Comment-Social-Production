@@ -25,9 +25,8 @@ userInfo.controller('mainController', function($scope, $http) {
             success(function(data) {
                 //bind our response data to our scope to use
                 $scope.userData = data;
-                //clear the form
-                $("#userForm")[0].reset();
-                $("#userForm")[0] = "";
+                //reset the form data to be nothing
+                $scope.formData = {};
                 
             }).error(function(data) {
                 console.error("error in posting");
@@ -49,9 +48,8 @@ userInfo.controller('mainController', function($scope, $http) {
             success(function(data) {
                 //bind our response data to our scope to use
                 $scope.userData = data;
-                //clear the form
-                $("#userForm")[0].reset();
-                $("#userForm")[0] = "";
+                //reset the form data to be nothing
+                $scope.formData = {};
                 
             }).error(function(data) {
                 console.error("error in posting");
@@ -74,8 +72,6 @@ userInfo.controller('mainController', function($scope, $http) {
                 //bind our response data to our scope to use
                 $scope.userData = data;
 
-                $("#userForm")[0] = "";
-
                 //redirect
                 if(data.redirect)
                 {
@@ -83,9 +79,8 @@ userInfo.controller('mainController', function($scope, $http) {
                 }
                 else
                 {
-                    //clear the form
-                    $("#userForm")[0].reset();
-                    $("#userForm")[0] = "";
+                    //reset the form data to be nothing
+                    $scope.formData = {};
                 }
                 
             }).error(function(data) {
@@ -115,9 +110,8 @@ userInfo.controller('mainController', function($scope, $http) {
                 }
                 else
                 {
-                    //clear the form
-                    $("#userForm")[0].reset();
-                    $("#userForm")[0] = "";
+                    //reset the form data to be nothing
+                    $scope.formData = {};
                 }
                 
             }).error(function(data) {
@@ -176,9 +170,8 @@ userInfo.controller('getData', function($scope, $http) {
                 }
                 else
                 {
-                    //clear the form
-                    $("#userForm")[0].reset();
-                    $("#userForm")[0] = "";
+                    //reset the form data to be nothing
+                    $scope.formData = {};
                 }
                 
             }).error(function(data) {

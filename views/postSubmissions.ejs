@@ -18,7 +18,7 @@
         <div class="container">
             <!-- FORM TO SUBMIT DATA -->
             <div id="user-form" class="row">
-                <form class="col-sm-8 col-sm-offset-2 text-center" id="post-form">
+                <form class="col-sm-8 col-sm-offset-2 text-center" name="postForm" id="post-form">
                     <!-- Create the inputs and submit button-->
                     <input type="text" ng-model="formData.text" placeholder="Enter text" />
                     <button type="submit" class="btn btn-primary" ng-click="postSubmit()">Submit</button>
@@ -28,7 +28,7 @@
                 <div id="userposts">
                     <h3 class="moduletitle text-center">User Posts</h3>
                     <ul ng-repeat="post in userData">
-                        <li id="post"><a ng-click="reply(post._id)"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</a></li>
+                        <li id="post" title="Cannot Reply Directly to Your Own Posts"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</li>
                     </ul>
                 </div>
                 <!-- Create a table for all posts -->
@@ -36,13 +36,15 @@
                     <h3 class="moduletitle text-center">All Posts</h3>
                     <!-- Loop through each post and show the details -->
                     <ul ng-repeat="post in postData">
-                        <li id="post"><a ng-click="reply(post._id)"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</a></li>
+                        <li id="post"><a title="Click to Reply" ng-click="reply(post._id)"><b>{{ post.username }}</b> posted:  {{ post.text }} at {{ post.dateTime }}</a></li>
                         <li id="reply" ng-repeat="reply in post.replies">
-                            <b>{{ reply.username }}</b> posted:  {{ reply.text }} at {{ reply.dateTime }}
+                            <b>{{ reply.username }}</b> replied:  {{ reply.text }} at {{ reply.dateTime }}
                         </li>
                     </ul>
                 </div>
             </div>
+
+            <a href="/api/logout"><button type="submit" id="btn" class="btn btn-primary">Logout</button></a>
         </div>
     </body>
 </html>

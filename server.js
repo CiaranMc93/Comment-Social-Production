@@ -79,29 +79,49 @@ var sessionStore;
         res.end();
     });
 
+    //render the reply posts file
+    router.get('/logout', function(req, res) {
+
+        //set username back to undefined
+        sessionStore.username = undefined;
+        //when user logs out, go back to login screen
+        res.render('login.ejs');
+        res.end();
+    });
+
     //get the correct post to reply to
     router.post('/posts/replyTo', function(req, res) {
 
         //get the session
         sessionStore = req.session;
 
-        var id = req.body._id;
-
-         //get all posts that have the username
-        UserPost.find({'_id' : id}, function(err, posts) {
-            var postMap = {};
-
-            //get each post (only going to be one) that has the id equal to what we have passed in
-            posts.forEach(function(post) {
-              postMap[0] = post;
-            });
-
-            //store our post in the session for retrieval later
-            sessionStore.post = postMap[0];
-            //send the redirect
-            res.send({redirect : '/api/posts/reply'});
+        if(req.body._id === undefined || req.body._id == '')
+        {
+            //send error msg
+            res.send({"reply" : "ID is Incorrect"});
             res.end();
-        });
+        }
+        else
+        { 
+            var id = req.body._id;
+
+            //get all posts that have the username
+            UserPost.find({'_id' : id}, function(err, posts) {
+
+                var postMap = {};
+
+                //get each post (only going to be one) that has the id equal to what we have passed in
+                posts.forEach(function(post) {
+                  postMap[0] = post;
+                });
+
+                //store our post in the session for retrieval later
+                sessionStore.post = postMap[0];
+                //send the redirect
+                res.send({redirect : '/api/posts/reply'});
+                res.end();
+            });
+        }
     });
 
     //send the data to the replyto page
@@ -119,24 +139,14 @@ var sessionStore;
         UserPost.find({'username' : sessionStore.username}, function(err, posts) {
             var postMap = {};
 
-            console.log(posts);
-
             //get each post that has the username as the stored user
             posts.forEach(function(post) {
               postMap[post] = post;
             });
 
-            console.log(postMap);
             //send all the data back in JSON
             res.json(postMap);
         });
-    });
-
-    //get the data back from the database relating to users
-    router.get('/posts/reply', function(req, res) {
-
-        //send all the data back in JSON
-        res.json({"user":"reply"});
     });
 
     //get the data back from the database relating to users
@@ -178,8 +188,6 @@ var sessionStore;
 		//get the response from the function
         var response = submitPost(req,res,"post");
 
-        //send the json response
-        res.json(response);
 	});
 
 	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -188,33 +196,40 @@ var sessionStore;
 		//get the session
 		sessionStore = req.session;
 
-		//get data entered
-		var username = req.body.username;
+        if(req.body.username === undefined)
+        {
+            res.json({'user':'No Data Submitted'});
+        }
+        else
+        {
+            //get data entered
+            var username = req.body.username;
 
-		//check if the username entered is taken
-		User.findOne({ 'username' :  username }, function(err, user) {
-            // if there are any errors, return the error
-            if (err || username == '')
-            {
-            	//send the data back as it is already json
-				res.send({'user':'notCreated'});
-            }
-            else
-            {
-                // check to see if theres already a user with that email and login
-                if (user) 
+            //check if the username entered is taken
+            User.findOne({ 'username' :  username }, function(err, user) {
+                // if there are any errors, return the error
+                if (err || username == '')
                 {
-                    //store the username when logged in
-                    sessionStore.username = username;
-                    //send the data back to be displayed
-                    res.send({redirect : '/api/posts'});
-                    res.end();
-
-                } else {
-                    res.json({'user':'User Does not Exist'});
+                    //send the data back as it is already json
+                    res.send({'user':'notCreated'});
                 }
-            }
-        });
+                else
+                {
+                    // check to see if theres already a user with that email and login
+                    if (user) 
+                    {
+                        //store the username when logged in
+                        sessionStore.username = username;
+                        //send the data back to be displayed
+                        res.send({redirect : '/api/posts'});
+                        res.end();
+
+                    } else {
+                        res.json({'user':'User Does not Exist'});
+                    }
+                }
+            });
+        }
 	});
 
 	//Allow users to sign up.
@@ -223,51 +238,59 @@ var sessionStore;
         //get the session
         sessionStore = req.session;
 
-		//get data entered
-		var username = req.body.username;
+        if(req.body.username === undefined)
+        {
+             res.json({'user':'No Data Submitted'});
+        }
+        else
+        {
 
-		//check if the username entered is taken
-		User.findOne({ 'username' :  username }, function(err, user) {
-            // if there are any errors, return the error
-            if (err || req.body.username == '')
-            {
-            	//send the data back as it is already json
-				res.send({'user':'User Form is Empty'});
-            }
-            else
-            {
-                // check to see if theres already a user with that username
-                if (user) 
+    		//get data entered
+    		var username = req.body.username;
+
+    		//check if the username entered is taken
+    		User.findOne({ 'username' :  username }, function(err, user) {
+                // if there are any errors, return the error
+                if (err || req.body.username == '' || req.body.username === undefined)
                 {
-                    res.send({'user':'User Exists Already'});
-                } else {
-                    // create the user
-                    var newUser = new User();
-
-                    //add in the relevant details to be inserted
-                    newUser.username = username;
-
-                    //save in the database
-                    newUser.save(function(err) {
-                        if (err)
-                            console.log("User Create error");
-
-                        //store the username when logged in
-                        sessionStore.username = username;
-                        //send the data back to be displayed
-                        res.send({redirect : '/api/posts'});
-                        res.end();
-                    });
+                	//send the data back as it is already json
+    				res.send({'user':'User Form is Empty'});
                 }
-            }
-        });
+                else
+                {
+                    // check to see if theres already a user with that username
+                    if (user) 
+                    {
+                        res.send({'user':'User Exists Already'});
+                    } else {
+                        // create the user
+                        var newUser = new User();
+
+                        //add in the relevant details to be inserted
+                        newUser.username = username;
+
+                        //save in the database
+                        newUser.save(function(err) {
+                            if (err)
+                                console.log("User Create error");
+
+                            //store the username when logged in
+                            sessionStore.username = username;
+                            //send the data back to be displayed
+                            res.send({redirect : '/api/posts'});
+                            res.end();
+                        });
+                    }
+                }
+            });
+        }
 	});
 
     //when a person is logged in, the posts will be submitted here
     router.post('/posts/submitPost', function(req, res, next) {
 
         //check if there was text submitted
-        if(req.body.text == '')
+        if(req.body.text == '' || req.body.text === undefined)
         {
             res.json({'error':'emptyText'});
         }
@@ -278,11 +301,11 @@ var sessionStore;
         }
     });
 
-    //when a person is logged in, the posts will be submitted here
+    //when a person is trying to reply the posts will be submitted here
     router.post('/posts/reply/submitReply', function(req, res, next) {
 
         //check if there was text submitted
-        if(req.body.text == '')
+        if(req.body.text == '' || req.body.text === undefined)
         {
             res.json({'error':'emptyText'});
         }
@@ -333,8 +356,8 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	//mongoose.connect(configDB.url); // connect to our external database
-	mongoose.connect(configDB.urlLocal); // connect to our local database
+	mongoose.connect(configDB.url); // connect to our external database
+	//mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
@@ -370,12 +393,15 @@ function getDateTime() {
 
 }
 
+//function to submit posts
 function submitPost(req,res,flag)
 {
+
 	//check if there was text submitted
-    if(req.body.text == '')
+    if(req.body.text == '' || req.body.text === undefined)
     {
-        return{'error':'emptyText'};
+        res.send({'error' : 'emptyText'});
+        res.end();
     }
     else
     {

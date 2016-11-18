@@ -29,6 +29,7 @@ postReply.controller('replyTo', function($scope, $http) {
             $http.post('/api//posts/reply/submitReply',$scope.formData).
             success(function(data) {
 
+                //go back to the posts page
                	window.location = data.redirect;
                 
             }).error(function(data) {
