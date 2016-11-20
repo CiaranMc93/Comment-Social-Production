@@ -131,7 +131,7 @@ describe('Validate Data Sending and Database Functionality', function() {
 		chai.request(server)
 		//get the correct route to test
 	    .post('/api/submit')
-	    .send({'text':'testPost'})
+	    .send({'post':'testPost'})
 	    .end(function(err, res){
 	    	//test assertions about the code.
 		    res.should.have.status(200);
@@ -348,7 +348,7 @@ describe('Check Reply Submissions and Getting all the Posts', function() {
 		chai.request(server)
 		//get the correct route to test
 	    .post('/api/posts/submitPost')
-	    .send({'text':'testPost'})
+	    .send({'post':'testPost'})
 	    .end(function(err, res){
 	    	//test assertions about the code.
 		    res.should.have.status(200);

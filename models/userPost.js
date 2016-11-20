@@ -7,14 +7,22 @@ var userPostSchema = mongoose.Schema({
 	username : String,
 	text : String,
 	dateTime : String,
-	//check if the post is a reply or not
-	isReply : Boolean,
+	//location
+	cityName : String,
+	lat : String,
+	long : String,
+	temp : String,
 
 	//capture all the replies for this 
 	replies : [{
 		username : String,
 		text: String,
 		dateTime : String,
+		//location
+		cityName : String,
+		lat : String,
+		long : String,
+		temp : String
 	}]
 });
 

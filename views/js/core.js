@@ -121,6 +121,8 @@ userInfo.controller('mainController', function($scope, $http) {
     }
 });
 
+       
+
 //define the controller
 userInfo.controller('getData', function($scope, $http) {
 
@@ -153,6 +155,8 @@ userInfo.controller('getData', function($scope, $http) {
     //handle the submitUser functionality
     $scope.postSubmit = function() {
 
+        var jsonData = {}
+
         //check if the form has been created or not.
         if ($scope.formData === undefined) {
             console.error("error in posting");
@@ -160,23 +164,50 @@ userInfo.controller('getData', function($scope, $http) {
         else
         {
 
-            $http.post('/api/posts/submitPost',$scope.formData).
-            success(function(data) {
+            //get our weather data
+            $http.get('http://api.openweathermap.org/data/2.5/weather?q=' + $scope.formData.cityName + '&APPID=a21bc137c3ed492be60d8d6715396aab&units=metric')
+            //map the response to json
+            .success(function(data){
 
-                //redirect
-                if(data.redirect)
-                {
-                    window.location = data.redirect;
-                }
-                else
-                {
-                    //reset the form data to be nothing
-                    $scope.formData = {};
-                }
-                
-            }).error(function(data) {
-                console.error("error in posting");
+                jsonData = {
+                    cityName : $scope.formData.cityName,
+                    post : $scope.formData.text,
+                    lat : data.coord.lat,
+                    long : data.coord.lon,
+                    temp : data.main.temp
+                }   
+
+
+                console.log(jsonData);
+
+                //post the data
+                $http.post('/api/posts/submitPost',jsonData).
+                success(function(data) {
+
+
+                    //redirect
+                    if(data.redirect)
+                    {
+                        window.location = data.redirect;
+                        //reset the data
+                        jsonData = {};
+                    }
+                    else
+                    {
+                        //reset the form data to be nothing
+                        $scope.formData = {};
+                        //reset the data
+                        jsonData = {};
+                    }
+                    
+                }).error(function(data) {
+                    console.error("error in posting");
+                })
+
             })
+            .error(function(data) { 
+                console.error("Error in posting" + error);
+            });
         }
     }
 

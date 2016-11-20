@@ -290,7 +290,7 @@ var sessionStore;
     router.post('/posts/submitPost', function(req, res, next) {
 
         //check if there was text submitted
-        if(req.body.text == '' || req.body.text === undefined)
+        if(req.body.post == '' || req.body.post === undefined)
         {
             res.json({'error':'emptyText'});
         }
@@ -356,8 +356,8 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	mongoose.connect(configDB.url); // connect to our external database
-	//mongoose.connect(configDB.urlLocal); // connect to our local database
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
@@ -398,7 +398,7 @@ function submitPost(req,res,flag)
 {
 
 	//check if there was text submitted
-    if(req.body.text == '' || req.body.text === undefined)
+    if(req.body.post == '' || req.body.post === undefined)
     {
         res.send({'error' : 'emptyText'});
         res.end();
@@ -406,7 +406,7 @@ function submitPost(req,res,flag)
     else
     {
         //get data entered
-        var text = req.body.text;
+        var text = req.body.post;
 
         // create the post
         var newPost = new UserPost();
