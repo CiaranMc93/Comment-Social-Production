@@ -8,6 +8,7 @@
         <script type="text/javascript" src="/jquery/dist/jquery.min.js"></script> 
         <script src="/angular/angular.min.js"></script>
         <script src="/js/core.js"></script>
+        <link href="/css/submissions.css" rel="stylesheet" type="text/css" />
         <style>
             body         { padding-top:80px; }
         </style>
@@ -18,14 +19,38 @@
             <!-- FORM TO SUBMIT DATA -->
             <div id="user-form" class="row">
                 <div class="col-sm-8 col-sm-offset-2 text-center">
-                    <form name="userForm" id="userForm">
+                    <form ng-valid name="userForm" id="userForm">
                         <!-- Create the inputs and submit button-->
-                      <input type="text" ng-model="formData.text" placeholder="Enter text" />
-                      <input type="text" ng-model="formData.cityName" placeholder="Enter City Name" />
+                      <input type="text" ng-model="formData.text" required placeholder="Enter text" />
+                      <input type="text" ng-model="formData.username"  required placeholder="Enter Username" />
+                      <input type="text" ng-model="formData.cityName" required placeholder="Enter City Name" />
                       <button type="submit" class="btn btn-primary" ng-click="submitPost()">Done</button>
                     </form>
+                    <div><b><h3>{{ errorData }}</h3></b></div>
                 </div>
             </div>
         </div>
+        <div id="allPosts" class="container" ng-init="getData()">
+                <div id="userposts">
+                    <h3 class="moduletitle text-center">User Posts</h3>
+                    <ul id="listItems" ng-repeat="post in userData">
+                        <li id="post" title="User Posted This"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}<br>
+                        <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius</li>
+                    </ul>
+                </div>
+                <!-- Create a table for all posts -->
+                <div id="all" ng-init="getAllPosts()">
+                    <h3 class="moduletitle text-center">All Posts</h3>
+                    <!-- Loop through each post and show the details -->
+                    <ul id="listItems" ng-repeat="post in postData">
+                        <li id="post"><a title="Click to Reply" ng-click="reply(post._id)"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}<br>
+                        <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius</a></li>
+                        
+                        <!-- Display replies if they have replies-->
+                        <li id="reply" ng-repeat="reply in post.replies"><b>{{ reply.username }}</b> replied:  "{{ reply.text }}" on {{ reply.dateTime }}<br>
+                        <b>Location: {{ reply.cityName }}</b> Latitude: {{ reply.lat }} Longitude: {{ reply.long }} and the Temperature was {{ reply.temp }} Degrees Celcius</a></li>
+                    </ul>
+                </div>
+            </div>
     </body>
 </html>

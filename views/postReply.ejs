@@ -18,7 +18,7 @@
         <div class="container">
             <table id="userposts" class="table table-bordered text-center">
                 <tr>
-                     <td colspan='50%'>
+                     <td colspan='100%'>
                          <p>Reply to: {{ replyToPost.username }} about their post: "{{ replyToPost.text }}" on: {{ replyToPost.dateTime }}</p>
                     </td>
                 </tr>
@@ -28,6 +28,8 @@
                 <form class="col-sm-8 col-sm-offset-2 text-center" id="post-form">
                     <!-- Create the inputs and submit button-->
                     <input type="text" ng-model="formData.text" placeholder="Enter text" />
+                    <input type="text" ng-model="formData.username"  required placeholder="Enter Username" />
+                    <input type="text" ng-model="formData.cityName" required placeholder="Enter City Name" />
                     <button type="submit" class="btn btn-primary" ng-click="postReply()">Reply</button>
                 </form>
             </div>

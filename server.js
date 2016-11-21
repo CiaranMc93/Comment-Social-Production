@@ -63,29 +63,15 @@ var sessionStore;
 	    res.render('submitPost.ejs');
 	});
 
-	router.get('/login', function(req, res) {
-	    res.render('login.ejs');
-	});
-
     //render the submit posts file
 	router.get('/posts', function(req, res) {
-	    res.render('postSubmissions.ejs');
+	    res.render('submitPost.ejs');
 	    res.end();
 	});
 
     //render the reply posts file
     router.get('/posts/reply', function(req, res) {
         res.render('postReply.ejs');
-        res.end();
-    });
-
-    //render the reply posts file
-    router.get('/logout', function(req, res) {
-
-        //set username back to undefined
-        sessionStore.username = undefined;
-        //when user logs out, go back to login screen
-        res.render('login.ejs');
         res.end();
     });
 
@@ -135,18 +121,25 @@ var sessionStore;
     //get the data back from the database relating to users
     router.get('/posts/getUserPosts', function(req, res) {
 
-        //get all posts that have the username
-        UserPost.find({'username' : sessionStore.username}, function(err, posts) {
-            var postMap = {};
+        if(sessionStore === undefined)
+        {
+            res.json({'user' : 'User Posts not Found'});
+        }
+        else
+        {
+            //get all posts that have the username
+            UserPost.find({'username' : sessionStore.username}, function(err, posts) {
+                var postMap = {};
 
-            //get each post that has the username as the stored user
-            posts.forEach(function(post) {
-              postMap[post] = post;
+                //get each post that has the username as the stored user
+                posts.forEach(function(post) {
+                  postMap[post] = post;
+                });
+
+                //send all the data back in JSON
+                res.json(postMap);
             });
-
-            //send all the data back in JSON
-            res.json(postMap);
-        });
+        }
     });
 
     //get the data back from the database relating to users
@@ -185,121 +178,16 @@ var sessionStore;
 	//submit route for all posts without a user (4th Task)
 	router.post('/submit', function(req, res) {
 
-		//get the response from the function
-        var response = submitPost(req,res,"post");
-
-	});
-
-	// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-	router.post('/login', function(req, res, next) {
-
-		//get the session
-		sessionStore = req.session;
-
-        if(req.body.username === undefined)
-        {
-            res.json({'user':'No Data Submitted'});
-        }
-        else
-        {
-            //get data entered
-            var username = req.body.username;
-
-            //check if the username entered is taken
-            User.findOne({ 'username' :  username }, function(err, user) {
-                // if there are any errors, return the error
-                if (err || username == '')
-                {
-                    //send the data back as it is already json
-                    res.send({'user':'notCreated'});
-                }
-                else
-                {
-                    // check to see if theres already a user with that email and login
-                    if (user) 
-                    {
-                        //store the username when logged in
-                        sessionStore.username = username;
-                        //send the data back to be displayed
-                        res.send({redirect : '/api/posts'});
-                        res.end();
-
-                    } else {
-                        res.json({'user':'User Does not Exist'});
-                    }
-                }
-            });
-        }
-	});
-
-	//Allow users to sign up.
-	router.post('/signup', function(req, res, next) {
-
-        //get the session
+        //create the session
         sessionStore = req.session;
+        //store the username/citynNme in the session
+        sessionStore.username = req.body.username;
+        sessionStore.cityName = req.body.cityName;
 
-        if(req.body.username === undefined)
-        {
-             res.json({'user':'No Data Submitted'});
-        }
-        else
-        {
+		//submit the post
+        submitPost(req,res);
 
-    		//get data entered
-    		var username = req.body.username;
-
-    		//check if the username entered is taken
-    		User.findOne({ 'username' :  username }, function(err, user) {
-                // if there are any errors, return the error
-                if (err || req.body.username == '' || req.body.username === undefined)
-                {
-                	//send the data back as it is already json
-    				res.send({'user':'User Form is Empty'});
-                }
-                else
-                {
-                    // check to see if theres already a user with that username
-                    if (user) 
-                    {
-                        res.send({'user':'User Exists Already'});
-                    } else {
-                        // create the user
-                        var newUser = new User();
-
-                        //add in the relevant details to be inserted
-                        newUser.username = username;
-
-                        //save in the database
-                        newUser.save(function(err) {
-                            if (err)
-                                console.log("User Create error");
-
-                            //store the username when logged in
-                            sessionStore.username = username;
-                            //send the data back to be displayed
-                            res.send({redirect : '/api/posts'});
-                            res.end();
-                        });
-                    }
-                }
-            });
-        }
 	});
-
-    //when a person is logged in, the posts will be submitted here
-    router.post('/posts/submitPost', function(req, res, next) {
-
-        //check if there was text submitted
-        if(req.body.post == '' || req.body.post === undefined)
-        {
-            res.json({'error':'emptyText'});
-        }
-        else
-        {
-        	//submit as a normal post
-        	submitPost(req,res,"userPost");
-        }
-    });
 
     //when a person is trying to reply the posts will be submitted here
     router.post('/posts/reply/submitReply', function(req, res, next) {
@@ -313,16 +201,26 @@ var sessionStore;
         {
 
             //get data entered
+            var username = req.body.username;
+            var cityName = req.body.cityName;
             var text = req.body.text;
+            var lat = req.body.lat;
+            var long = req.body.long;
+            var temp = req.body.temp;
 
             //get the date and time
             //format == YYYY:MM:DD:HH:MM:SS
             var dateTime = getDateTime();
 
+            //array to hold the data to be inserted
             var replies = {
-                username: sessionStore.username,
-                text: text,
-                dateTime: dateTime
+                username : username,
+                cityName : cityName,
+                text : text,
+                dateTime : dateTime,
+                lat : lat,
+                long : long,
+                temp : temp
             };
 
             //save in the database
@@ -336,7 +234,7 @@ var sessionStore;
                     if(err)
                         console.log(err);
 
-                    //refresh the page with the new data when a new post is submitted
+                    //redirect to the posts page when a new post is submitted
                     res.send({redirect : '/api/posts'});
                     next();
                 }
@@ -389,12 +287,12 @@ function getDateTime() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
 
-    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
-
+    //return the date in a decent format
+    return day + "/" + month + "/" + year + " at " + hour + ":" + min;
 }
 
 //function to submit posts
-function submitPost(req,res,flag)
+function submitPost(req,res)
 {
 
 	//check if there was text submitted
@@ -418,17 +316,16 @@ function submitPost(req,res,flag)
         //format == YYYY:MM:DD:HH:MM:SS
         var dateTime = getDateTime();
 
-        if(flag == 'userPost')
-    	{
-    		newPost.username = sessionStore.username;
-    	}
-    	else
-    	{
-    		newPost.username = 'Anonymous';
-    	}
+    	newPost.username = req.body.username;
 
         //store the dateTime
-        newPost.dateTime = dateTime;
+        newPost.dateTime = dateTime;  
+
+        //store the City Name/temperature/lat/long
+        newPost.cityName = req.body.cityName;
+        newPost.temp = req.body.temp;
+        newPost.lat = req.body.lat;
+        newPost.long = req.body.long;
 
         //save in the database
         newPost.save(function(err) {

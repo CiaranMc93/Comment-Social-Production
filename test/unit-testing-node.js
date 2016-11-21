@@ -158,126 +158,12 @@ describe('Validate Data Sending and Database Functionality', function() {
 	});
 });
 
-//testing the 5th task
-describe('Check Login/Signup and User Posting', function() {
 
-	it('Check Login with Empty Username', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/login')
-	    .send({'username':''})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('notCreated');
-		    done();
-	    });
-	});
+//testing the 5th,6th and 7th Tasks
+describe('Check Reply Submissions and Getting all the Posts', function() {
 
-	it('Check User Login Form is Undefined', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/login')
-	    .send()
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('No Data Submitted');
-		    done();
-	    });
-	});
-
-	it('Check User Does Not Exist', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/login')
-	    .send({'username':'errorTestUser'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('User Does not Exist');
-		    done();
-	    });
-	});
-
-	it('Check User Signup Form is Empty', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/signup')
-	    .send({'username':''})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('User Form is Empty');
-		    done();
-	    });
-	});
-
-	it('Check User Signup Form is Undefined', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/signup')
-	    .send()
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('No Data Submitted');
-		    done();
-	    });
-	});
-
-	it('Create Test User', function(done) {
-		chai.request(server)
-		//get the correct route to test
-	    .post('/api/signup')
-	    .send({'username':'testUser'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('redirect');
-		    done();
-	    });
-	});
-
-	it('Check User Already Signed Up', function(done) {
-	chai.request(server)
-		//get the correct route to test
-	    .post('/api/signup')
-	    .send({'username':'testUser'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('user');
-		    res.body.user.should.equal('User Exists Already');
-		    done();
-	    });
-	});
+	//hold the post ID
+	var postID;
 
 	it('Get All Posts Check', function(done) {
 		chai.request(server)
@@ -292,6 +178,22 @@ describe('Check Login/Signup and User Posting', function() {
 	    });
 	});
 
+	it('Create Test Post', function(done) {
+		chai.request(server)
+		//get the correct route to test
+	    .post('/api/submit')
+	    .send({'post':'testPost','username':'testUser','cityName':'Dublin,Ireland'})
+	    .end(function(err, res){
+	    	//test assertions about the code.
+		    res.should.have.status(200);
+		    res.body.should.be.a('object');
+		    //sent in random text, then it put that into json.
+		    //check that the text sent in has no value as it is only text
+		    res.body.should.have.property('redirect');
+		    done();
+	    });
+	});
+
 	it('Get All User Posts Check', function(done) {
 		chai.request(server)
 		//get the correct route to test
@@ -301,61 +203,6 @@ describe('Check Login/Signup and User Posting', function() {
 		    res.should.have.status(200);
 		    //check that the returned data is an object
 		    res.body.should.be.instanceof(Object);
-		    done();
-	    });
-	});
-
-	it('Remove New Test User', function(done) {
-
-		//remove the user so the test can pass
-	    User.find({'username' : "testUser"}).remove(function(err){
-    		if (err)
-            {
-                throw "error";
-            } else
-            {
-            	done();
-            	//exit the process for continuous integration build
-            	//process.exit();
-            }
-		});
-	});
-});
-
-//testing the 6th Task
-describe('Check Reply Submissions and Getting all the Posts', function() {
-
-	//hold the post ID
-	var postID;
-
-	it('Create Test User', function(done) {
-		chai.request(server)
-		//get the correct route to test
-	    .post('/api/signup')
-	    .send({'username':'testUser'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('redirect');
-		    done();
-	    });
-	});
-
-	it('Create Test Post', function(done) {
-		chai.request(server)
-		//get the correct route to test
-	    .post('/api/posts/submitPost')
-	    .send({'post':'testPost'})
-	    .end(function(err, res){
-	    	//test assertions about the code.
-		    res.should.have.status(200);
-		    res.body.should.be.a('object');
-		    //sent in random text, then it put that into json.
-		    //check that the text sent in has no value as it is only text
-		    res.body.should.have.property('redirect');
 		    done();
 	    });
 	});
@@ -530,7 +377,7 @@ describe('Check Reply Submissions and Getting all the Posts', function() {
             	//passed
             	done();
             	//exit the process for continuous integration build
-            	process.exit();
+            	//process.exit();
             }
 		});
 	});
