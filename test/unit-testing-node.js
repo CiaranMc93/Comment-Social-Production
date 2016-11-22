@@ -337,7 +337,7 @@ describe('Check Reply Submissions and Getting all the Posts', function() {
 
 	it('Post a Reply to the Post we Created', function(done) {
 		chai.request(server)
-		//get the correct route to test
+		//post to the correct route to test
 	    .post('/api/posts/reply/submitReply')
 	    .send({'text':'testReply'})
 	    .end(function(err, res){
@@ -377,7 +377,7 @@ describe('Check Reply Submissions and Getting all the Posts', function() {
             	//passed
             	done();
             	//exit the process for continuous integration build
-            	//process.exit();
+            	process.exit();
             }
 		});
 	});

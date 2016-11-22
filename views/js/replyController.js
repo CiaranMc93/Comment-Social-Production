@@ -13,6 +13,8 @@ postReply.controller('replyTo', function($scope, $http) {
             
         }).error(function(data) {
             console.error("error in posting");
+            //redirect in error
+            window.location = '/api/submit';
         })
     }
 
@@ -22,7 +24,7 @@ postReply.controller('replyTo', function($scope, $http) {
         var jsonData = {};
 
         //check if the form has been created or not.
-        if ($scope.formData === undefined) {
+        if ($scope.formData.text === undefined || $scope.formData.username === undefined || $scope.formData.cityName === undefined) {
             console.error("error in posting");
         }
         else
@@ -60,6 +62,8 @@ postReply.controller('replyTo', function($scope, $http) {
                     
                 }).error(function(data) {
                     console.error("Error in posting");
+                    //redirect in error
+                    window.location = '/api/submit';
                 })
             })
             .error(function(data) { 

@@ -9,6 +9,7 @@
         <script src="/angular/angular.min.js"></script>
         <script src="/js/replyController.js"></script>
         <link href="/css/submissions.css" rel="stylesheet" type="text/css" />
+        <link href="/css/formStyle.css" rel="stylesheet" type="text/css" />
         <style>
             body         { padding-top:80px; }
         </style>
@@ -16,23 +17,23 @@
     <!-- SET THE CONTROLLER and get the post you want to reply to -->
     <body ng-controller="replyTo" ng-init="reply()">
         <div class="container">
-            <table id="userposts" class="table table-bordered text-center">
-                <tr>
-                     <td colspan='100%'>
-                         <p>Reply to: {{ replyToPost.username }} about their post: "{{ replyToPost.text }}" on: {{ replyToPost.dateTime }}</p>
-                    </td>
-                </tr>
-            </table>
+            <div id="userposts" class="card cardType text-center">
+                <p><b>Reply to: {{ replyToPost.username }}</b>  about their post: "{{ replyToPost.text }}" on: {{ replyToPost.dateTime }}</p>
+            </div>
             <!-- FORM TO SUBMIT REPLY DATA -->
             <div id="user-form" class="row">
-                <form class="col-sm-8 col-sm-offset-2 text-center" id="post-form">
-                    <!-- Create the inputs and submit button-->
-                    <input type="text" ng-model="formData.text" placeholder="Enter text" />
-                    <input type="text" ng-model="formData.username"  required placeholder="Enter Username" />
-                    <input type="text" ng-model="formData.cityName" required placeholder="Enter City Name" />
-                    <button type="submit" class="btn btn-primary" ng-click="postReply()">Reply</button>
-                </form>
+               <div ng-valid name="userForm" class="cardType form-style-6">
+                    <h1>Submit Post</h1>
+                    <form ng-valid name="userForm" id="userForm">
+                        <textarea type="text" ng-model="formData.text" required placeholder="Enter Reply Text Here"></textarea>
+                        <input type="text" ng-model="formData.username"  required placeholder="Enter Username Here" />
+                        <input type="text" ng-model="formData.cityName" required placeholder="Enter City Name Here" />
+                        <input type="submit" value="Reply" ng-click="postReply()"/>
+                    </form>
+                    <div><b><h3>{{ errorData }}</h3></b></div>
+                </div>
             </div>
+            <div class="col-sm-8 col-sm-offset-2 text-center"><b><h3>{{ errorData }}</h3></b></div>
         </div>
     </body>
 </html>

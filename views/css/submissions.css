@@ -1,14 +1,29 @@
-#user-form{
+.cardType{
+	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 8px 22px 0 rgba(0, 0, 0, 0.20);
+}
+
+/*
+.bgColor {
+	background-color: ;
+}*/
+
+#formHolder{
 	margin-bottom: 20px;
 }
 
 #post{
 	padding-top: 5px; 
 	padding-left: 5px;
-	list-style-position:inside; 
 	padding-bottom: 5px; 
+	list-style-position:inside; 
 	list-style: none;
-	border: 1px solid black;
+	
+}
+
+#listItems {
+	padding-top: 20px;
+	margin-left: 40px;
+	margin-right: 40px;
 }
 
 #reply{
@@ -20,13 +35,12 @@
 	margin-bottom: 10px;
 }
 
-#all{
-	border: 1px solid black;
-}
-
 #userposts{
-	border: 1px solid black;
+	padding-top: 10px;
 	margin-bottom: 150px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-bottom: 40px;
 }
 
 #btn{
@@ -38,7 +52,21 @@
 	margin-bottom: 150px;
 }
 
+#all{
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
 #listItems{
 	padding-right: 40px;
 	padding-bottom: 40px;
 }
+
+.card {
+  background: white;
+  position: relative;
+  .border-radius(2px);
+  .box-sizing(border-box);
+  font-size: 1.5em;
+}
+

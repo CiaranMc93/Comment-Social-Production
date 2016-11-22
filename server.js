@@ -71,6 +71,9 @@ var sessionStore;
 
     //render the reply posts file
     router.get('/posts/reply', function(req, res) {
+        //remove username session storage as new person is replying.
+        sessionStore.username = undefined;
+
         res.render('postReply.ejs');
         res.end();
     });
