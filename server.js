@@ -30,6 +30,19 @@ app.use(session({
 }));
 app.use(helmet());
 
+var https = require('https');
+var fs = require('fs');
+
+/*
+var hskey = fs.readFileSync(__dirname + '/https/server.enc.key');
+var hscert = fs.readFileSync(__dirname + '/https/server.csr')
+
+var options = {
+    key: hskey,
+    cert: hscert
+};
+*/
+
 //session storage variable
 var sessionStore;
 
@@ -257,13 +270,19 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	mongoose.connect(configDB.url); // connect to our external database
-	//mongoose.connect(configDB.urlLocal); // connect to our local database
+	//mongoose.connect(configDB.url); // connect to our external database
+	mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
 if(!module.parent)
 {
+	/*
+	https.createServer(options, function (req, res) {
+	    res.writeHead(200);
+	    res.end("The Magic Happens On Port 8080");
+	}).listen(port);
+	*/
 	app.listen(port, function () {
 	console.log('The Magic happens on port 8080!');
 	});
