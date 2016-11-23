@@ -23,14 +23,13 @@
             <!-- FORM TO SUBMIT REPLY DATA -->
             <div id="user-form" class="row">
                <div ng-valid name="userForm" class="cardType form-style-6">
-                    <h1>Submit Post</h1>
+                    <h1>Submit Reply</h1>
                     <form ng-valid name="userForm" id="userForm">
                         <textarea type="text" ng-model="formData.text" required placeholder="Enter Reply Text Here"></textarea>
                         <input type="text" ng-model="formData.username"  required placeholder="Enter Username Here" />
-                        <input type="text" ng-model="formData.cityName" required placeholder="Enter City Name Here" />
+                        <input type="text" ng-model="formData.cityName" required placeholder="Enter City Address Here" />
                         <input type="submit" value="Reply" ng-click="postReply()"/>
                     </form>
-                    <div><b><h3>{{ errorData }}</h3></b></div>
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-2 text-center"><b><h3>{{ errorData }}</h3></b></div>

@@ -1,0 +1,70 @@
+{
+   "results" : [
+      {
+         "address_components" : [
+            {
+               "long_name" : "Toronto",
+               "short_name" : "Toronto",
+               "types" : [ "route" ]
+            },
+            {
+               "long_name" : "La Florida",
+               "short_name" : "La Florida",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "La Florida",
+               "short_name" : "La Florida",
+               "types" : [ "administrative_area_level_3", "political" ]
+            },
+            {
+               "long_name" : "Santiago",
+               "short_name" : "Santiago",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "Región Metropolitana",
+               "short_name" : "Región Metropolitana",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "Chile",
+               "short_name" : "CL",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Toronto, La Florida, Región Metropolitana, Chile",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : -33.5412984,
+                  "lng" : -70.5736682
+               },
+               "southwest" : {
+                  "lat" : -33.5413994,
+                  "lng" : -70.57486170000001
+               }
+            },
+            "location" : {
+               "lat" : -33.5413114,
+               "lng" : -70.5742836
+            },
+            "location_type" : "GEOMETRIC_CENTER",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : -33.53999991970849,
+                  "lng" : -70.5729159697085
+               },
+               "southwest" : {
+                  "lat" : -33.54269788029149,
+                  "lng" : -70.57561393029151
+               }
+            }
+         },
+         "partial_match" : true,
+         "place_id" : "ChIJ07DL_9_QYpYRwBUosyG1_9A",
+         "types" : [ "route" ]
+      }
+   ],
+   "status" : "OK"
+}

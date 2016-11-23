@@ -8,11 +8,13 @@ var mongoose   = require('mongoose');
 var configDB   = require('./config/database.js');
 var HttpStatus = require('http-status-codes');
 //secure the application
-var helmet = require('helmet');
+var helmet     = require('helmet');
 var router 	   = express.Router();              // get an instance of the express Router
+
+
 // load up the models
 var User       = require('./models/user.js');
-var UserPost       = require('./models/userPost.js');
+var UserPost   = require('./models/userPost.js');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -30,18 +32,19 @@ app.use(session({
 }));
 app.use(helmet());
 
+//require https so that we can make the app secure
 var https = require('https');
 var fs = require('fs');
 
-/*
-var hskey = fs.readFileSync(__dirname + '/https/server.enc.key');
-var hscert = fs.readFileSync(__dirname + '/https/server.csr')
+//get the key and the cert
+var hskey = fs.readFileSync(__dirname + '/domain.key');
+var hscert = fs.readFileSync(__dirname + '/domain.crt')
 
 var options = {
     key: hskey,
     cert: hscert
 };
-*/
+
 
 //session storage variable
 var sessionStore;
@@ -86,7 +89,6 @@ var sessionStore;
     router.get('/posts/reply', function(req, res) {
         //remove username session storage as new person is replying.
         sessionStore.username = undefined;
-
         res.render('postReply.ejs');
         res.end();
     });
@@ -270,22 +272,21 @@ var sessionStore;
 
 	// DATABASE SETUP
 	// configuration ===============================================================
-	//mongoose.connect(configDB.url); // connect to our external database
-	mongoose.connect(configDB.urlLocal); // connect to our local database
+	mongoose.connect(configDB.url); // connect to our external database
+	//mongoose.connect(configDB.urlLocal); // connect to our local database
 
 // launch ======================================================================
 //make sure that if the tests use this file, they do not try and launch the server again
 if(!module.parent)
 {
+    //run using https with our certificate and key
+	https.createServer(options, app).listen(port);
+
+    //backup to run server on http rather than https
 	/*
-	https.createServer(options, function (req, res) {
-	    res.writeHead(200);
-	    res.end("The Magic Happens On Port 8080");
-	}).listen(port);
-	*/
 	app.listen(port, function () {
 	console.log('The Magic happens on port 8080!');
-	});
+	});*/
 }
 
 function getDateTime() {
@@ -361,4 +362,5 @@ function submitPost(req,res)
     }
 }
 
+//export app to be used elsewhere
 module.exports = app;

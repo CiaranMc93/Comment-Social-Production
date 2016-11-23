@@ -1,0 +1,63 @@
+Certificate Request:
+    Data:
+        Version: 0 (0x0)
+        Subject: C=CA, ST=Ontario, L=Toronto, O=LoyaltyOne, OU=Software, CN=comment-social-production.herokuapp.com/emailAddress=ciaranmcmanus@live.ie
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:cd:f2:b6:2a:53:50:4b:07:32:cd:83:e4:60:2c:
+                    60:ca:38:84:f0:3d:36:37:88:72:29:c3:9b:cd:6d:
+                    15:fa:67:00:c6:88:58:67:7a:b9:e0:3c:9f:2c:5c:
+                    fe:21:c6:3e:c1:59:f2:88:fa:08:93:05:d4:45:80:
+                    f4:c0:8a:26:53:cd:08:84:0b:cc:1b:2c:97:92:24:
+                    a6:b0:69:fb:7d:4c:ca:67:6e:1a:08:45:9d:32:84:
+                    3f:f6:42:60:ed:6f:dd:5d:17:50:24:33:08:d2:dd:
+                    d2:c8:8c:96:41:84:74:2e:f8:9f:3c:5e:99:3a:91:
+                    6c:8b:82:7e:5d:da:c4:93:6b:f2:02:9a:17:cb:f8:
+                    db:25:64:9c:db:6c:44:bf:02:8c:e8:17:ea:1e:56:
+                    90:62:7c:76:03:64:67:96:be:b8:c2:b7:44:a3:9d:
+                    63:eb:35:da:bc:1d:80:87:0d:c0:eb:63:52:72:92:
+                    d4:dc:e5:f0:e7:03:a2:25:11:3f:72:46:29:e7:87:
+                    6f:ed:d6:12:13:f9:63:6f:a3:fd:9d:dd:52:b7:87:
+                    77:6f:5e:97:fd:d6:ba:61:7a:98:4a:f8:80:11:eb:
+                    91:81:83:df:ca:70:25:81:a6:0d:14:7b:06:f0:9b:
+                    02:41:61:61:f0:66:9d:96:ee:7a:81:f2:84:fc:51:
+                    99:09
+                Exponent: 65537 (0x10001)
+        Attributes:
+            a0:00
+    Signature Algorithm: sha1WithRSAEncryption
+        0a:9e:69:04:9a:80:4d:83:cf:49:61:47:2f:af:59:a7:ff:e7:
+        a4:d6:de:7d:7a:70:4a:22:cd:6b:58:ca:24:1c:fa:0d:af:e9:
+        0d:75:b6:23:e0:fb:9e:7c:e1:2f:a3:76:54:11:e1:28:0d:da:
+        a7:8e:2b:62:90:bc:f6:46:a1:60:c8:c4:66:ed:1f:5d:63:b1:
+        45:5a:f8:5d:93:70:ce:0b:a9:64:66:84:4f:a8:42:f5:52:b5:
+        3a:07:93:f3:5f:bf:47:26:86:81:e6:65:67:91:6c:ca:a5:2d:
+        a8:d8:4a:e0:94:b0:73:f8:3c:94:0b:8b:ea:5c:fc:f1:35:12:
+        27:26:61:00:3f:0f:67:e4:14:c8:39:00:9e:a4:c6:31:2d:82:
+        c5:9f:27:81:fd:2b:e6:ab:6b:be:9f:11:bc:1f:98:73:f9:43:
+        8a:72:60:0e:78:71:05:5a:58:c6:77:e9:62:14:6f:c4:a5:8d:
+        9c:f6:1d:ed:3a:89:0b:5b:20:57:dd:59:29:b4:9c:9d:27:ed:
+        0b:11:c8:43:e7:26:5b:f8:59:d0:2a:10:f1:fb:37:73:a4:d9:
+        97:e0:8c:6d:7c:54:75:a5:3d:cc:72:53:db:a6:3e:58:10:5b:
+        4e:30:9d:da:64:cc:b6:a3:2e:6c:36:ae:5c:e5:7a:c8:fe:01:
+        ea:3b:e4:98
+-----BEGIN CERTIFICATE REQUEST-----
+MIIC9zCCAd8CAQAwgbExCzAJBgNVBAYTAkNBMRAwDgYDVQQIDAdPbnRhcmlvMRAw
+DgYDVQQHDAdUb3JvbnRvMRMwEQYDVQQKDApMb3lhbHR5T25lMREwDwYDVQQLDAhT
+b2Z0d2FyZTEwMC4GA1UEAwwnY29tbWVudC1zb2NpYWwtcHJvZHVjdGlvbi5oZXJv
+a3VhcHAuY29tMSQwIgYJKoZIhvcNAQkBFhVjaWFyYW5tY21hbnVzQGxpdmUuaWUw
+ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDN8rYqU1BLBzLNg+RgLGDK
+OITwPTY3iHIpw5vNbRX6ZwDGiFhnerngPJ8sXP4hxj7BWfKI+giTBdRFgPTAiiZT
+zQiEC8wbLJeSJKawaft9TMpnbhoIRZ0yhD/2QmDtb91dF1AkMwjS3dLIjJZBhHQu
++J88Xpk6kWyLgn5d2sSTa/ICmhfL+NslZJzbbES/AozoF+oeVpBifHYDZGeWvrjC
+t0SjnWPrNdq8HYCHDcDrY1JyktTc5fDnA6IlET9yRinnh2/t1hIT+WNvo/2d3VK3
+h3dvXpf91rphephK+IAR65GBg9/KcCWBpg0UewbwmwJBYWHwZp2W7nqB8oT8UZkJ
+AgMBAAGgADANBgkqhkiG9w0BAQUFAAOCAQEACp5pBJqATYPPSWFHL69Zp//npNbe
+fXpwSiLNa1jKJBz6Da/pDXW2I+D7nnzhL6N2VBHhKA3ap44rYpC89kahYMjEZu0f
+XWOxRVr4XZNwzgupZGaET6hC9VK1OgeT81+/RyaGgeZlZ5FsyqUtqNhK4JSwc/g8
+lAuL6lz88TUSJyZhAD8PZ+QUyDkAnqTGMS2CxZ8ngf0r5qtrvp8RvB+Yc/lDinJg
+DnhxBVpYxnfpYhRvxKWNnPYd7TqJC1sgV91ZKbScnSftCxHIQ+cmW/hZ0CoQ8fs3
+c6TZl+CMbXxUdaU9zHJT26Y+WBBbTjCd2mTMtqMubDauXOV6yP4B6jvkmA==
+-----END CERTIFICATE REQUEST-----
