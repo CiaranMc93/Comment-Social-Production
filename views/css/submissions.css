@@ -2,11 +2,6 @@
 	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 8px 22px 0 rgba(0, 0, 0, 0.20);
 }
 
-/*
-.bgColor {
-	background-color: ;
-}*/
-
 #formHolder{
 	margin-bottom: 20px;
 }
@@ -69,4 +64,3 @@
   .box-sizing(border-box);
   font-size: 1.5em;
 }
-

@@ -35,6 +35,7 @@ postReply.controller('replyTo', function($scope, $http) {
         else
         {
 
+            /* HTTPS Code not as good as normal http code
             $http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + $scope.formData.cityName + '+FL&sensor=false')
             .success(function(data){
                 //need to get long and latitude in order to use the https weather API.
@@ -87,6 +88,52 @@ postReply.controller('replyTo', function($scope, $http) {
                     //reset the data
                     jsonData = {};
                 });
+            });*/
+
+            //get our weather data
+            $http.get('http://api.openweathermap.org/data/2.5/weather?q=' + $scope.formData.cityName + '&APPID=a21bc137c3ed492be60d8d6715396aab&units=metric')
+            //map the response to json
+            .success(function(data){
+
+                jsonData = {
+                    username : $scope.formData.username,
+                    cityName : $scope.formData.cityName,
+                    text : $scope.formData.text,
+                    lat : data.coord.lat,
+                    long : data.coord.lon,
+                    temp : data.main.temp
+                }   
+
+                $http.post('/api/posts/reply/submitReply', jsonData).
+                success(function(data) {
+                    //redirect
+                    if(data.redirect)
+                    {
+                        window.location = data.redirect;
+                        //reset the data
+                        jsonData = {};
+                    }
+                    else
+                    {
+                        //reset the form data to be nothing
+                        $scope.formData = {};
+                        //reset the data
+                        jsonData = {};
+                    }
+                    
+                }).error(function(data) {
+                    console.error("Error in posting");
+                    //redirect in error
+                    window.location = '/api/submit';
+                })
+            })
+            .error(function(data) { 
+                //give error back
+                $scope.errorData = "City is Incorrect or Spelled Incorrectly";
+                //reset the form data to be nothing
+                $scope.formData = {};
+                //reset the data
+                jsonData = {};
             });
         }
     }

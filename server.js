@@ -75,10 +75,6 @@ var sessionStore;
 	    res.render('viewJSONResponse.ejs');
 	});
 
-	router.get('/submit', function(req, res) {
-	    res.render('submitPost.ejs');
-	});
-
     //render the submit posts file
 	router.get('/posts', function(req, res) {
 	    res.render('submitPost.ejs');
@@ -280,13 +276,13 @@ var sessionStore;
 if(!module.parent)
 {
     //run using https with our certificate and key
-	https.createServer(options, app).listen(port);
+	//https.createServer(options, app).listen(port);
 
     //backup to run server on http rather than https
-	/*
+	
 	app.listen(port, function () {
 	console.log('The Magic happens on port 8080!');
-	});*/
+	});
 }
 
 function getDateTime() {
