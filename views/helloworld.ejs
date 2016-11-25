@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
         <script type="text/javascript" src="/jquery/dist/jquery.min.js"></script> 
         <script src="/angular/angular.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="/js/core.js"></script>
         <style>
             body         { padding-top:80px; }
@@ -15,7 +16,12 @@
     <!-- SET THE CONTROLLER -->
     <body ng-controller="mainController">
         <div class="container">
-            <p><h1>Hello World</h1></p>
+            <div class="container">
+            <div class="jumbotron text-center">
+                <h1>Hello World</h1>
+            </div>
+        </div>
+        <p><a class="col-sm-8 col-sm-offset-2 text-center rect cardType" href="/">Home</a>.</p>
         </div>
     </body>
 </html>

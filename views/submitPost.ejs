@@ -33,26 +33,27 @@
             </div>
         </div>
         <div id="allPosts" class="container" ng-init="getData()">
-                <div class="cardType bgColor" id="userposts">
-                    <h3 class="moduletitle text-center">User Posts</h3>
-                    <ul id="listItems" class="card cardType bgColor" ng-repeat="post in userData">
-                        <li id="post" title="User Posted This"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}.<br>
-                        <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius.</li>
-                    </ul>
-                </div>
-                <!-- Create a table for all posts -->
-                <div id="all" class="cardType bgColor" ng-init="getAllPosts()">
-                    <h3 class="moduletitle text-center">All Posts</h3>
-                    <!-- Loop through each post and show the details -->
-                    <ul id="listItems" class="card cardType bgColor" ng-repeat="post in postData">
-                        <li id="post"><a title="Click to Reply" ng-click="reply(post._id)"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}.<br>
-                        <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius.</a></li>
-                        
-                        <!-- Display replies if they have replies-->
-                        <li id="reply" ng-repeat="reply in post.replies"><b>{{ reply.username }}</b> replied:  "{{ reply.text }}" on {{ reply.dateTime }}<br>
-                        <b>Location: {{ reply.cityName }}</b> Latitude: {{ reply.lat }} Longitude: {{ reply.long }} and the Temperature was {{ reply.temp }} Degrees Celcius.</a></li>
-                    </ul>
-                </div>
+            <div class="cardType bgColor" id="userposts">
+                <h3 class="moduletitle text-center">User Posts</h3>
+                <ul id="listItems" class="card cardType bgColor" ng-repeat="post in userData">
+                    <li id="post" title="User Posted This"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}.<br>
+                    <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius.</li>
+                </ul>
             </div>
+            <!-- Create a table for all posts -->
+            <div id="all" class="cardType bgColor" ng-init="getAllPosts()">
+                <h3 class="moduletitle text-center">All Posts</h3>
+                <!-- Loop through each post and show the details -->
+                <ul id="listItems" class="card cardType bgColor" ng-repeat="post in postData">
+                    <li id="post"><a title="Click to Reply" ng-click="reply(post._id)"><b>User: {{ post.username }}</b> posted: "{{ post.text }}" on {{ post.dateTime }}.<br>
+                    <b>Location: {{ post.cityName }}</b> Latitude: {{ post.lat }} Longitude: {{ post.long }} and the Temperature was {{ post.temp }} Degrees Celcius.</a></li>
+                    
+                    <!-- Display replies if they have replies-->
+                    <li id="reply" ng-repeat="reply in post.replies"><b>{{ reply.username }}</b> replied:  "{{ reply.text }}" on {{ reply.dateTime }}<br>
+                    <b>Location: {{ reply.cityName }}</b> Latitude: {{ reply.lat }} Longitude: {{ reply.long }} and the Temperature was {{ reply.temp }} Degrees Celcius.</a></li>
+                </ul>
+            </div>
+        </div>
+        <p><a class="col-sm-8 col-sm-offset-2 text-center rect cardType" href="/">Home</a>.</p>
     </body>
 </html>

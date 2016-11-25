@@ -1,3 +1,13 @@
+//core.js
+/**
+ * @summary This file is the main javascript file that allows the client to request and post data as they use the application.
+ *
+ *
+ * @since 14/11/2016
+ * @author Ciaran McManus
+ * @email ciaranmcmanus@live.ie
+ */
+
 var userInfo = angular.module('userInfo', []);
 
 // Create the factory that share the Data

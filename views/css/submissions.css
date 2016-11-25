@@ -1,3 +1,13 @@
+/*submissions.css*/
+/**
+ * @summary This file is the main styling file where a lot of the applications styling is from.
+ *
+ *
+ * @since 14/11/2016
+ * @author Ciaran McManus
+ * @email ciaranmcmanus@live.ie
+ */
+
 .cardType{
 	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 8px 22px 0 rgba(0, 0, 0, 0.20);
 }
@@ -63,4 +73,18 @@
   .border-radius(2px);
   .box-sizing(border-box);
   font-size: 1.5em;
+}
+
+.rect{
+	margin-top: 40px;
+	padding-left: 20px;
+	margin-bottom: 40px;
+	background-color: white;
+}
+
+#mainDiv{
+	background-image: url('../images/background.jpg');
+	background-size:     cover;                    
+    background-repeat:   no-repeat;
+    background-position: center center;
 }

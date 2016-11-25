@@ -1,4 +1,13 @@
-// load the things we need
+/**
+ * @summary This file is the database modelling file so that we can define our model and use it in the application to store our data.
+ *
+ *
+ * @since 14/11/2016
+ * @author Ciaran McManus
+ * @email ciaranmcmanus@live.ie
+ */
+
+// load the dependencies we need
 var mongoose = require('mongoose');
 
 // define the schema for our user model

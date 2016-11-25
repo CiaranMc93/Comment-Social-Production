@@ -1,3 +1,13 @@
+//replyController.js
+/**
+ * @summary This file is the file that allows the client to reply to comments by making post data from a form.
+ *
+ *
+ * @since 14/11/2016
+ * @author Ciaran McManus
+ * @email ciaranmcmanus@live.ie
+ */
+
 var postReply = angular.module('postReply', []);
 
 //variables for longitude and latitude

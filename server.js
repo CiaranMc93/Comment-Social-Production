@@ -1,4 +1,15 @@
 //server.js
+
+/**
+ * @summary This file serves as the server. It accepts requests and returns data.
+ *
+ * This server file creates the server and handles all of the logic to do with the server.
+ *
+ * @since 14/11/2016
+ * @author Ciaran McManus
+ * @email ciaranmcmanus@live.ie
+ */
+
 // get all the tools we need ===================================================
 var express    = require('express');
 var session    = require('express-session');
@@ -45,9 +56,8 @@ var options = {
     cert: hscert
 };
 
-
-//session storage variable
-var sessionStore;
+    //session storage variable
+    var sessionStore;
 
 	//set up the port we want to run on
 	var port     = process.env.PORT || 8080;
@@ -196,8 +206,6 @@ var sessionStore;
         sessionStore = req.session;
         //store the username/citynNme in the session
         sessionStore.username = req.body.username;
-        sessionStore.cityName = req.body.cityName;
-
 		//submit the post
         submitPost(req,res);
 
